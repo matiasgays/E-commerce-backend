@@ -37,19 +37,15 @@ class Math {
     }
 
     static asyncFunction = async (operation) => {
-        const mathOp = new Math().operations.find(op => op === operation);
-        if(mathOp) {
-            try {
-                console.log(await Math.addition(3,2));
-            }
-            catch (err)  {
-                console.log(err);
-            }
+        try {
+            console.log(await operation(3,2));
         }
-        else console.log('Operation not found');
+        catch (err)  {
+            console.log(err);
+        }
     }
 }
 
 
-Math.asyncFunction('substraction');
+Math.asyncFunction(Math.addition);
 console.log('Async console.log');
