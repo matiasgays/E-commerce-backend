@@ -32,7 +32,6 @@ class ProductManeger {
               })
         return;
     }
-
 }
 
 const newproductManeger = new ProductManeger();
