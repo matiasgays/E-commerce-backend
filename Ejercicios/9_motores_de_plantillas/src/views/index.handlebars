@@ -1,0 +1,14 @@
+<p>
+    <ul>
+        {{#if isAdmin}}
+        <li>{{user.name}}</li>
+        <li>{{user.lastName}}</li>
+        <li>{{user.age}}</li>
+        <li>{{user.mail}}</li>
+        <li>{{user.tel}}</li>
+        {{else}}
+        <p>You are not an admin</p>
+        {{/if}}
+    </ul>
+</p>
+<script src="/js/index.js"></script>

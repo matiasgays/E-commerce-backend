@@ -1,0 +1,17 @@
+{
+  "name": "9_motores_de_plantillas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "nodemon": "^2.0.20"
+  }
+}
