@@ -124,7 +124,6 @@ class Product {
 
     writeInFile = async () => {
         try {
-            console.log(this.products);
             await fs.promises.writeFile(this.path,JSON.stringify(this.products));
         } catch (err) {
             throw new Error(err);

@@ -5,7 +5,7 @@ const path =  './src/products.json';
 
 const newProduct = new Product(path);
 
-productRouter.get('',(req, res, next) => {
+productRouter.get('/',(req, res, next) => {
     getProductsAsync(req, res);
 });
 
@@ -13,7 +13,7 @@ productRouter.get('/:pid',(req, res) => {
     getProductByIdAsync(req, res);
 });
 
-productRouter.post('', (req,res) => {
+productRouter.post('/', (req,res) => {
     addProductAsync(req,res);
 })
 

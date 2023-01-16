@@ -5,7 +5,7 @@ const path =  './src/cart.json';
 
 const cart = new Cart(path);
 
-cartRouter.get('',(req, res, next) => {
+cartRouter.get('/',(req, res, next) => {
     getCartAsync(req, res);
 });
 
@@ -13,7 +13,7 @@ cartRouter.get('/:cid',(req, res, next) => {
     getCartByIdAsync(req, res);
 });
 
-cartRouter.post('', (req, res) => {
+cartRouter.post('/', (req, res) => {
     addProductInCartAsync(req, res);
 })
 
