@@ -1,11 +1,11 @@
 const express = require('express');
 const viewRouter = express.Router();
 const { Product } = require('../Product');
-const path =  './src/products.json';
+const path =  './src/db/products.json';
 const fs = require('fs');
 
 viewRouter.get('/', (req, res) => {
-    const products = fs.readFileSync('./src/products.json', "utf8");
+    const products = fs.readFileSync('./src/db/products.json', "utf8");
     const productsJSON = JSON.parse(products);
     res.render('home', {products: productsJSON, style: 'index.css'} );
 })

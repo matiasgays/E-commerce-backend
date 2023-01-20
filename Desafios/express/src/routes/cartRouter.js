@@ -1,7 +1,7 @@
 const express = require("express");
 const cartRouter = express.Router();
 const { Cart } = require('../Cart');
-const path =  './src/cart.json';
+const path =  './src/db/cart.json';
 
 const cart = new Cart(path);
 

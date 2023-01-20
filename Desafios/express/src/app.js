@@ -29,7 +29,7 @@ app.use('/cart',cartRouter);
 app.use('/', viewRouter);
 
 socketServer.on('connection', socket => {
-    const products = fs.readFileSync('./src/products.json', "utf8");
+    const products = fs.readFileSync('./src/db/products.json', "utf8");
     const productsJSON = JSON.parse(products);
     socket.emit('list', productsJSON);
 });

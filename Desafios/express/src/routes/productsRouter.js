@@ -1,7 +1,7 @@
 const express = require("express");
 const productRouter = express.Router();
 const { Product } = require('../Product');
-const path =  './src/products.json';
+const path =  './src/db/products.json';
 
 const newProduct = new Product(path);
 
