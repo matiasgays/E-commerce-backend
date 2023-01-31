@@ -1,0 +1,42 @@
+[
+    {
+        "name": "mello",
+        "lastName": "gays",
+        "course": "math",
+        "age": 29,
+        "ID": "ing.matiasgays@gmail.com",
+        "grade": 8
+    },
+    {
+        "name": "matias",
+        "lastName": "juares",
+        "course": "science",
+        "age": 25,
+        "ID": "matiasj@gmail.com",
+        "grade": 7
+    },
+    {
+        "name": "maria",
+        "lastName": "sanchez",
+        "course": "math",
+        "age": 23,
+        "ID": "marias@gmail.com",
+        "grade": 8
+    },
+    {
+        "name": "luisina",
+        "lastName": "daniba",
+        "course": "programming",
+        "age": 30,
+        "ID": "luisinad@gmail.com",
+        "grade": 9.5
+    },
+    {
+        "name": "andrea",
+        "lastName": "paredes",
+        "course": "programming",
+        "age": 29,
+        "ID": "andresp@gmail.com",
+        "grade": 8.5
+    }      
+]

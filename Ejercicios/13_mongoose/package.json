@@ -1,5 +1,5 @@
 {
-  "name": "chatgpt",
+  "name": "13_mongoose",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,10 +10,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongodb": "^4.13.0",
     "mongoose": "^6.9.0",
     "nodemon": "^2.0.20"
   }
