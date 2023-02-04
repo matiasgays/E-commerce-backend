@@ -10,7 +10,7 @@ const httpServer = app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 })
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER_NAME}:${process.env.MONGO_PSW}@cluster0.kpm0q.mongodb.net/clients?retryWrites=true&w=majority`, error => {
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER_NAME}:${process.env.MONGO_PSW}@cluster0.kpm0q.mongodb.net/ecommerce?retryWrites=true&w=majority`, error => {
     if (error) {
         console.log('Cannot connect to database: '+error);
         process.exit;
