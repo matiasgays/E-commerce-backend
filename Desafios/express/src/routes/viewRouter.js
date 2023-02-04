@@ -1,11 +1,11 @@
 const express = require('express');
 const viewRouter = express.Router();
-const { Product } = require('../Product');
-const path =  './src/db/products.json';
+const { Product } = require('../dao/fileSystem/Product');
+const path =  './src/dao/fileSystem/products.json';
 const fs = require('fs');
 
 viewRouter.get('/', (req, res) => {
-    const products = fs.readFileSync('./src/db/products.json', "utf8");
+    const products = fs.readFileSync('./src/dao/fileSystem/products.json', "utf8");
     const productsJSON = JSON.parse(products);
     res.render('home', {products: productsJSON, style: 'index.css'} );
 })

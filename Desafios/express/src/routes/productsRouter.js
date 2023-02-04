@@ -1,94 +1,84 @@
 const express = require("express");
-const productRouter = express.Router();
-const { Product } = require('../Product');
-const path =  './src/db/products.json';
+const productsRouter = express.Router();
+const { Product } = require('../dao/Product');
 
-const newProduct = new Product(path);
+const newProduct = new Product();
 
-productRouter.get('/',(req, res, next) => {
+productsRouter.get('/',(req, res, next) => {
     getProductsAsync(req, res);
 });
 
-productRouter.get('/:pid',(req, res) => {
+productsRouter.get('/:pid',(req, res) => {
     getProductByIdAsync(req, res);
 });
 
-productRouter.post('/', (req,res) => {
+productsRouter.post('/', (req,res) => {
     addProductAsync(req,res);
 })
 
-productRouter.put('/:pid',(req, res) => {
+productsRouter.put('/:pid',(req, res) => {
     updateProductAsync(req, res);
 })
 
-productRouter.delete('/:pid',(req, res) => {
+productsRouter.delete('/:pid',(req, res) => {
     deleteProductAsync(req, res);
 })
 
 module.exports = {
-    productRouter
+    productsRouter
 }
 
 const getProductsAsync = async (req, res) => {
-    let limit = req.query.limit;
     try {
-        let serverRes = await newProduct.getProducts();
-        if (!serverRes.error) {
-            if (!limit) {
-                res.send({status: 200, message: serverRes.message, payload: serverRes.payload});
-            }
-            else {
-                const payloadLimit = serverRes.payload.filter((element,index) => index < limit );
-                res.send({status: 200, message: serverRes.message, payload: payloadLimit});
-            }
-        }
-        else res.send({status: 400, message: serverRes.message});
+        const serverRes = await newProduct.getProducts();
+        res.send({status: 200, message: serverRes.message, payload: serverRes.payload});
+
     } catch (error) {
-        throw new Error(error);
+        res.send({ status: 500, message: 'Could not get products: '+error });
     }
 }
 
 const getProductByIdAsync = async (req, res) => {
     try {
-        serverRes = await newProduct.getproductById(Number(req.params.pid));
-        (!serverRes.error)
-            ?   res.send({status: 200, message: serverRes.message, payload: serverRes.payload})
-            :   res.send({status: 400, message: serverRes.message})
+        const serverRes = await newProduct.getProductById(req.params.pid);
+        res.send({ status: 200, message: serverRes.message, payload: serverRes.payload });
 
     } catch (error) {
-        throw new Error(error);
+        res.send({ status: 500, message: 'Could not get products: '+error });
     }
 }
 
 const addProductAsync = async (req,res) => {
     try {
-        let serverRes = await newProduct.addProduct(req.body);
+        const serverRes = await newProduct.addProduct(req.body);
         (!serverRes.error)
-            ?   res.send({status: 200, message: serverRes.message})
-            :   res.send({status: 400, message: serverRes.message})
+            ?   res.send({ status: 200, message: serverRes.message })
+            :   res.send({ status: 400, message: serverRes.message })
     } catch (error) {
-        throw new Error(error);
+        res.send({ status: 500, message: 'Could not add product: '+error });
     }
 }
 
 const updateProductAsync = async (req, res) => {
     try {
-        let serverRes = await newProduct.updateProduct(req.params.pid,req.body);
+        const serverRes = await newProduct.updateProduct(req.params.pid,req.body);
         (!serverRes.error)
-            ?   res.send({status: 200, message: serverRes.message})
-            :   res.send({status: 400, message: serverRes.message})
+        ?   res.send({ status: 200, message: serverRes.message })
+        :   res.send({ status: 400, message: serverRes.message })
+
     } catch (error) {
-        throw new Error(error);
+        res.send({ status: 500, message: 'Could not update product: '+error });
     }
 }
 
 const deleteProductAsync = async (req, res) => {
     try {
-        let serverRes = await newProduct.deleteProduct(req.params.pid);
+        const serverRes = await newProduct.deleteProduct(req.params.pid);
         (!serverRes.error)
-            ?   res.send({status: 200, message: serverRes.message})
-            :   res.send({status: 400, message: serverRes.message})
+        ?   res.send({ status: 200, message: serverRes.message })
+        :   res.send({ status: 400, message: serverRes.message })
+
     } catch (error) {
-        throw new Error(error);
+        res.send({status: 500, message: 'Could not delete product: '+error});
     }
 }
