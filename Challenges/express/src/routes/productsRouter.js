@@ -14,7 +14,8 @@ const newProduct = new Product();
 productsRouter.get("/", async (req, res) => {
   try {
     const { status, payload } = await getProductsAsync(req, res);
-    res.status(status).render("products", { products: payload.docs });
+    // res.status(status).render("products", { products: payload.docs });
+    res.send({ status, payload });
   } catch (error) {
     throw new Error(error);
   }

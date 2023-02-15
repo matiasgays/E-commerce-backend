@@ -6,15 +6,11 @@ const cart = new Cart();
 
 cartRouter.get("/", (req, res, next) => {
   getCartAsync(req, res);
+  // res.render("cartId", { style: "cart.css" });
 });
 
-cartRouter.get("/:cid", async (req, res, next) => {
-  try {
-    const { status, payload } = await getCartByIdAsync(req, res);
-    res.status(status).render("cartId", { cart: payload[0].products });
-  } catch (error) {
-    throw new Error(error);
-  }
+cartRouter.get("/:cid", (req, res) => {
+  getCartByIdAsync(req, res);
 });
 
 cartRouter.post("/", (req, res) => {
@@ -61,11 +57,11 @@ const getCartAsync = async (req, res) => {
 const getCartByIdAsync = async (req, res) => {
   try {
     const serverRes = await cart.getCartById(req.params.cid);
-    return {
+    res.send({
       status: 200,
       message: serverRes.message,
       payload: serverRes.payload,
-    };
+    });
   } catch (error) {
     res.send({ status: 500, message: "Cannot get cart: " + error });
   }

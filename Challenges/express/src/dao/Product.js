@@ -2,13 +2,32 @@ const { productModel } = require("./models/productModel");
 
 class Product {
   getProducts = async (limit, page, sort, qr) => {
-    let query = qr ? { category: qr } : {};
+    let category, stock;
+    let query = {};
+    if (qr) {
+      const { category, stock } = JSON.parse(qr);
+      if (category) query.category = category;
+      if (stock) query.stock = stock;
+    }
+
+    let order;
+    switch (sort) {
+      case "asc":
+        order = 1;
+        break;
+      case "desc":
+        order = -1;
+        break;
+      default:
+        order = null;
+    }
     const options = {
       limit,
       page,
+      sort: { price: order },
     };
     try {
-      const mongoRes = await productModel.paginate({}, options);
+      const mongoRes = await productModel.paginate(query, options);
       return { message: "Products found", payload: mongoRes };
     } catch (error) {
       throw new Error("Server failed to find products");
