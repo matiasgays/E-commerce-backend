@@ -6,7 +6,6 @@ const cart = new Cart();
 
 cartRouter.get("/", (req, res, next) => {
   getCartAsync(req, res);
-  // res.render("cartId", { style: "cart.css" });
 });
 
 cartRouter.get("/:cid", (req, res) => {

@@ -1,24 +1,10 @@
-<h1>Welcome to StudentsList</h1>
+<h1>Products List</h1>
 <div>
   <p id="products"></p>
 </div>
 <button id="prevPage">Previous Page</button>
 <p id="page"></p>
 <button id="nextPage">Next Page</button>
-
-<h1>Product List</h1>
-{{#each products}}
-  <p>
-    <ul>
-      <li>Title: {{this.title}}</li>
-      <li>Description: {{this.description}}</li>
-      <li>Category: {{this.category}}</li>
-      <li>Price: ${{this.price}}</li>
-      <li>Code: {{this.code}}</li>
-    </ul>
-    <button id="addToCart">Add to Cart</button>
-  </p>
-{{/each}}
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/products.js"></script>

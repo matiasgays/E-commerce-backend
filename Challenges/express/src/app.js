@@ -53,8 +53,8 @@ app.set("view engine", "handlebars");
 
 app.use(express.static(__dirname + "/public"));
 
-app.use("/products", productsRouter);
-app.use("/cart", cartRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/cart", cartRouter);
 app.use("/", viewRouter);
 app.use("/messages", messagesRouter);
 
@@ -82,43 +82,5 @@ io.on("connection", (socket) => {
       }
     };
     postMessage();
-  });
-
-  let _page = 1;
-
-  const getProducts = async () => {
-    try {
-      products = await productModel.paginate({}, { limit: 10, page: 1 });
-    } catch (error) {
-      throw new Error("cannot get products");
-    }
-  };
-
-  getProducts().then(() => {
-    socket.emit("products", products.payload);
-  });
-
-  socket.on("nextPage", async () => {
-    try {
-      products = await productModel.paginate(
-        {},
-        { limit: 1, page: `${++_page}` }
-      );
-      socket.emit("products", products);
-    } catch (error) {
-      throw new Error("cannot get products");
-    }
-  });
-
-  socket.on("prevPage", async () => {
-    try {
-      products = await productModel.paginate(
-        { gender: "F" },
-        { limit: 1, page: `${--_page}` }
-      );
-      socket.emit("products", products);
-    } catch (error) {
-      throw new Error("cannot get products");
-    }
   });
 });

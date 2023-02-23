@@ -1,15 +1,15 @@
 body {
-  margin: 0;
+  margin: 10%;
   padding: 0;
   background: linear-gradient(to bottom right, #e3f0ff, #fafcff);
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .Cart-Container {
-  width: 70%;
-  height: 85%;
+  width: 100%;
+  height: 100%;
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0px 25px 40px #1687d933;
@@ -18,7 +18,7 @@ body {
 .Header {
   margin: auto;
   width: 90%;
-  height: 15%;
+  height: 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,13 +41,13 @@ body {
 .Cart-Items {
   margin: auto;
   width: 90%;
-  height: 30%;
+  height: 20%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .image-box {
-  width: 15%;
+  width: 10%;
   text-align: center;
 }
 .about {
@@ -67,6 +67,14 @@ body {
   font-family: ‘Open Sans’;
   font-weight: 600;
   color: #909090;
+}
+
+.h3 {
+  line-height: 10px;
+  font-size: 14px;
+  font-family: ‘Open Sans’;
+  font-weight: 600;
+  color: black;
 }
 
 .counter {

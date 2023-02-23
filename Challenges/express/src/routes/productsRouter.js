@@ -1,21 +1,13 @@
 const express = require("express");
 const productsRouter = express.Router();
 const { Product } = require("../dao/Product");
-const {
-  allowInsecurePrototypeAccess,
-} = require("@handlebars/allow-prototype-access");
 
 const newProduct = new Product();
-
-// productsRouter.get("/", (req, res, next) => {
-//   getProductsAsync(req, res);
-// });
 
 productsRouter.get("/", async (req, res) => {
   try {
     const { status, payload } = await getProductsAsync(req, res);
-    // res.status(status).render("products", { products: payload.docs });
-    res.send({ status, payload });
+    res.status(status).send({ payload });
   } catch (error) {
     throw new Error(error);
   }

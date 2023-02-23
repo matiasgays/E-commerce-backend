@@ -5,16 +5,15 @@ const path = "./src/dao/fileSystem/products.json";
 const fs = require("fs");
 
 viewRouter.get("/", (req, res) => {
-  const products = fs.readFileSync(
-    "./src/dao/fileSystem/products.json",
-    "utf8"
-  );
-  const productsJSON = JSON.parse(products);
-  res.render("home", { products: productsJSON, style: "index.css" });
+  res.render("products", { style: "index.css" });
 });
 
-viewRouter.get("/realtimeproducts", (req, res) => {
-  res.render("realTimeProducts", { style: "index.css" });
+viewRouter.get("/:pid", (req, res) => {
+  res.render("productDetail", { style: "productDetail.css" });
+});
+
+viewRouter.get("/cart/:cid", (req, res) => {
+  res.render("cartId", { style: "cartId.css" });
 });
 
 module.exports = {

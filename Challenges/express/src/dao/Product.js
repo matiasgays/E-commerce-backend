@@ -2,24 +2,19 @@ const { productModel } = require("./models/productModel");
 
 class Product {
   getProducts = async (limit, page, sort, qr) => {
-    let category, stock;
     let query = {};
     if (qr) {
       const { category, stock } = JSON.parse(qr);
       if (category) query.category = category;
       if (stock) query.stock = stock;
     }
-
     let order;
     switch (sort) {
-      case "asc":
-        order = 1;
-        break;
       case "desc":
         order = -1;
         break;
       default:
-        order = null;
+        order = 1;
     }
     const options = {
       limit,
