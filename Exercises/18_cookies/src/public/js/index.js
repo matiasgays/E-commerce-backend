@@ -13,12 +13,12 @@ getCookie.addEventListener("click", async () => {
 
 setCookie.addEventListener("click", async () => {
   const uname = document.getElementById("uname");
-  const email = document.getElementById("psw");
+  const psw = document.getElementById("psw");
   try {
     await fetch("/setCookie", {
       method: "POST",
       headers: { "Content-type": "application/json;charset=UTF-8" },
-      body: JSON.stringify({ uname: uname.value, email: email.value }),
+      body: JSON.stringify({ uname: uname.value, psw: psw.value }),
     });
   } catch (error) {
     throw new Error(error);
