@@ -1,11 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const messagesSchema = mongoose.Schema({
-    user: String,
-    message: String
-})
+  user: String,
+  message: String,
+});
 
-const messagesModel = mongoose.model('messages', messagesSchema);
-module.exports = {
-    messagesModel
-}
+const messagesModel = mongoose.model("messages", messagesSchema);
+
+export default messagesModel;

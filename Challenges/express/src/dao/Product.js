@@ -1,4 +1,4 @@
-const { productModel } = require("./models/productModel");
+import productModel from "./models/productModel.js";
 
 class Product {
   getProducts = async (limit, page, sort, qr) => {
@@ -103,6 +103,4 @@ class Product {
   };
 }
 
-module.exports = {
-  Product,
-};
+export default Product;

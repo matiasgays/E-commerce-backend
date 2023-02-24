@@ -8,6 +8,7 @@ let user;
 const API = "http://127.0.0.1:8080/";
 const API_PRODUCTS = "http://127.0.0.1:8080/api/products";
 const API_CART = "http://127.0.0.1:8080/api/cart";
+const logout = document.getElementById("logout");
 
 getProductsList();
 
@@ -24,6 +25,10 @@ prevPage.addEventListener("click", () => {
   params.page--;
   const query = convertParamsToQuery(params);
   window.location.href = API + query;
+});
+
+logout.addEventListener("click", () => {
+  window.location.href = "/login";
 });
 
 async function getProductsList() {

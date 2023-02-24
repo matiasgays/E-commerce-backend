@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import Cart from "../dao/Cart.js";
+
 const cartRouter = express.Router();
-const { Cart } = require("../dao/Cart.js");
 
 const cart = new Cart();
 
@@ -36,9 +37,7 @@ cartRouter.delete("/:cid/product/:pid", (req, res) => {
   deleteProductInCartByIdAsync(req, res);
 });
 
-module.exports = {
-  cartRouter,
-};
+export default cartRouter;
 
 const getCartAsync = async (req, res) => {
   try {

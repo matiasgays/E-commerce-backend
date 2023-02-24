@@ -1,4 +1,4 @@
-const { cartModel } = require("./models/cartModel.js");
+import cartModel from "./models/cartModel.js";
 
 class Cart {
   getCart = async () => {
@@ -158,6 +158,4 @@ class Cart {
   };
 }
 
-module.exports = {
-  Cart,
-};
+export default Cart;

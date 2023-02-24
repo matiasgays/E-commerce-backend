@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import Product from "../dao/Product.js";
+
 const productsRouter = express.Router();
-const { Product } = require("../dao/Product");
 
 const newProduct = new Product();
 
@@ -29,9 +30,7 @@ productsRouter.delete("/:pid", (req, res) => {
   deleteProductAsync(req, res);
 });
 
-module.exports = {
-  productsRouter,
-};
+export default productsRouter;
 
 const getProductsAsync = async (req, res) => {
   const { sort, query } = req.query;
