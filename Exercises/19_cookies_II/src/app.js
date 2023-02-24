@@ -8,6 +8,7 @@ import MongoStore from "connect-mongo";
 import session from "express-session";
 import loginRouter from "./routes/login.routes.js";
 import signupRouter from "./routes/signup.routes.js";
+import privateRouter from "./routes/private.routes.js";
 
 const app = express();
 dotenv.config();
@@ -59,3 +60,4 @@ app.get("/", (req, res) => {
 
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
+app.use("/private", privateRouter);
