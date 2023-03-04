@@ -1,4 +1,5 @@
-const loginBtn = document.getElementById("login");
+const login = document.getElementById("login");
+const signup = document.getElementById("signup");
 
 login.addEventListener("click", async (e) => {
   e.preventDefault();
@@ -23,4 +24,8 @@ login.addEventListener("click", async (e) => {
 
 github.addEventListener("click", () => {
   window.location.href = "http://127.0.0.1:8080/login/github";
+});
+
+signup.addEventListener("click", () => {
+  window.location.href = "http://127.0.0.1:8080/signup";
 });
