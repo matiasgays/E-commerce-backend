@@ -18,7 +18,8 @@ submit.addEventListener("click", async () => {
     if (serverRes.status === 201) {
       window.location.href = "/login";
     } else {
-      alert("Could not create user. Reload the page");
+      alert("Could not create user");
+      window.location.href = "/signup";
     }
   } catch (error) {
     throw new Error(error);

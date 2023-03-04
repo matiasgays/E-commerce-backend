@@ -14,6 +14,8 @@ import signupRouter from "./routes/signup.routes.js";
 import MongoStore from "connect-mongo";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 dotenv.config();
 
@@ -45,13 +47,17 @@ app.use(
     secret: "SECRET KEY",
     resave: true,
     saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl: URI,
-      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 30,
-    }),
+    // store: MongoStore.create({
+    //   mongoUrl: URI,
+    //   mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+    //   ttl: 30,
+    // }),
   })
 );
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/products", productsRouter);
 app.use("/api/cart", cartRouter);

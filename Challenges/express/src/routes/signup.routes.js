@@ -1,5 +1,5 @@
 import express from "express";
-import userModel from "../dao/models/userModel.js";
+import passport from "passport";
 
 const signupRouter = express.Router();
 
@@ -7,13 +7,14 @@ signupRouter.get("/", (req, res) => {
   res.render("signup", { style: "signup.css" });
 });
 
-signupRouter.post("/", async (req, res) => {
-  try {
-    await userModel.create(req.body);
-    res.status(201).send();
-  } catch (error) {
-    res.send({ status: 500, message: error });
+signupRouter.post(
+  "/",
+  passport.authenticate("signup", {
+    failureRedirect: "/signup",
+  }),
+  (req, res) => {
+    return res.status(201).send();
   }
-});
+);
 
 export default signupRouter;

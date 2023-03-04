@@ -1,5 +1,5 @@
 import express from "express";
-import userModel from "../dao/models/userModel.js";
+import passport from "passport";
 
 const loginRouter = express.Router();
 
@@ -12,28 +12,39 @@ loginRouter.get("/", (req, res) => {
   });
 });
 
-loginRouter.post("/", async (req, res) => {
-  const { uname, psw } = req.body;
-
-  try {
-    const mongoRes = await userModel.findOne({
-      $and: [{ email: uname, password: psw }],
-    });
-    if (mongoRes) {
-      req.session.user = uname;
-      req.session.firstName = mongoRes.firstName;
-      req.session.lastName = mongoRes.lastName;
-      req.session.age = mongoRes.age;
-      req.session.user === "adminCoder@coder.com"
-        ? (req.session.admin = true)
-        : (req.session.admin = false);
-      return res.status(200).json({ message: "Authentication succed" });
-    } else {
-      return res.status(401).json({ message: "Authentication failed" });
-    }
-  } catch (error) {
-    res.send({ status: 500, message: error });
+loginRouter.post(
+  "/",
+  passport.authenticate("login", {
+    failureRedirect: "/login",
+  }),
+  (req, res) => {
+    getSessions(req);
+    return res.status(201).send();
   }
-});
+);
+
+loginRouter.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
+
+loginRouter.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    getSessions(req);
+    res.redirect("/");
+  }
+);
 
 export default loginRouter;
+
+function getSessions(req) {
+  const { email, firstName, lastName, age } = req.user;
+  req.session.user = email;
+  req.session.firstName = firstName;
+  req.session.lastName = lastName;
+  req.session.age = age;
+  req.session.admin = email === "adminCoder@coder.com";
+}
