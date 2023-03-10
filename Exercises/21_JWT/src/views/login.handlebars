@@ -1,0 +1,37 @@
+<form>
+  <div class="container">
+    <p id="para"></p>
+    <label for="uname"><b>Username</b></label>
+    <input
+      type="text"
+      placeholder="Enter Username"
+      name="uname"
+      required
+      id="uname"
+    />
+    <label for="psw"><b>Password</b></label>
+    <input
+      type="password"
+      placeholder="Enter Password"
+      name="psw"
+      required
+      id="psw"
+    />
+
+    <button type="text" id="login">Login</button>
+    <button type="text" id="github">Login using GitHub</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember" />
+      Remember me
+    </label>
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" class="cancelbtn">Cancel</button>
+    <span class="psw">Forgot
+      <a href="/forgot" id="forgot-psw">password?</a></span>
+  </div>
+</form>
+<p id="cookies"></p>
+
+<script src="/js/login.js"></script>
