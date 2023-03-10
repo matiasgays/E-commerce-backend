@@ -16,6 +16,7 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import SessionRouter from "./routes/session.routes.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ const MONGO_USER_NAME = process.env.MONGO_USER_NAME;
 const MONGO_PSW = process.env.MONGO_PSW;
 const MONGO_DATABASE = "ecommerce";
 const URI = `mongodb+srv://${MONGO_USER_NAME}:${MONGO_PSW}@cluster0.kpm0q.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority`;
+const sessionsRouter = new SessionRouter();
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
@@ -47,17 +49,11 @@ app.use(
     secret: "SECRET KEY",
     resave: true,
     saveUninitialized: true,
-    // store: MongoStore.create({
-    //   mongoUrl: URI,
-    //   mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-    //   ttl: 30,
-    // }),
   })
 );
 
 initializePassport();
 app.use(passport.initialize());
-app.use(passport.session());
 
 app.use("/api/products", productsRouter);
 app.use("/api/cart", cartRouter);
@@ -65,6 +61,7 @@ app.use("/", viewRouter);
 app.use("/messages", messagesRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
+app.use("/sessions", sessionsRouter.getRouter());
 
 io.on("connection", (socket) => {
   socket.on("log in", (usr) => {

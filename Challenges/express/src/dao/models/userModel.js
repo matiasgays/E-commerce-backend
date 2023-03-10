@@ -13,10 +13,27 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     require: true,
+    unique: true,
   },
   password: {
     type: String,
     require: true,
+  },
+  cartId: {
+    type: [
+      {
+        cart: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "cartId",
+        },
+        quantity: Number,
+      },
+    ],
+    default: [],
+  },
+  role: {
+    type: String,
+    default: "user",
   },
 });
 

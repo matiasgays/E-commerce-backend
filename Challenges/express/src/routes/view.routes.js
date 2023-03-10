@@ -1,19 +1,24 @@
 import express from "express";
+import { passportCall, authorization } from "../utils.js";
 
 const viewRouter = express.Router();
-const path = "./src/dao/fileSystem/products.json";
 
-viewRouter.get("/", auth, (req, res) => {
-  const { firstName, lastName, age, user, admin } = req.session;
-  const profile = {
-    user,
-    firstName,
-    lastName,
-    age,
-    admin,
-  };
-  res.render("products", { style: "index.css", profile });
-});
+viewRouter.get(
+  "/",
+  passportCall("current"),
+  authorization("user"),
+  (req, res) => {
+    const { firstName, lastName, age, user, admin } = req.user;
+    const profile = {
+      user,
+      firstName,
+      lastName,
+      age,
+      admin,
+    };
+    res.render("products", { style: "index.css", profile });
+  }
+);
 
 // viewRouter.get("/:pid", (req, res) => {
 //   res.render("productDetail", { style: "productDetail.css" });
@@ -24,10 +29,3 @@ viewRouter.get("/cart/:cid", (req, res) => {
 });
 
 export default viewRouter;
-
-function auth(req, res, next) {
-  if (req.session.user) return next();
-  else {
-    return res.redirect("/login");
-  }
-}

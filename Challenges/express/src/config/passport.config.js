@@ -2,8 +2,9 @@ import passport from "passport";
 import local from "passport-local";
 import userModel from "../dao/models/userModel.js";
 import { createHash, isValidPassword } from "../utils.js";
-import githubStrategy from "passport-github2";
 import dotenv from "dotenv";
+import jwt, { ExtractJwt } from "passport-jwt";
+import githubStrategy from "passport-github2";
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GITHUB_CALLBACK_URL = process.env.GITHUB_CALLBACK_URL;
 
 const LocalStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
 
 const initializePassport = () => {
   passport.use(
@@ -24,7 +27,7 @@ const initializePassport = () => {
       },
       async (req, email, password, done) => {
         try {
-          const { firstName, lastName, age } = req.body;
+          const { firstName, lastName, age, cartId, role } = req.body;
           const user = await userModel.findOne({ email });
           if (user) {
             console.log("User already exists");
@@ -82,7 +85,7 @@ const initializePassport = () => {
           const newUser = {
             firstName: profile._json.name,
             lastName: "",
-            age: 18,
+            age: "",
             email: profile._json.email,
             password: "",
           };
@@ -103,6 +106,32 @@ const initializePassport = () => {
     let user = await userModel.findById(id);
     done(null, user);
   });
+
+  passport.use(
+    "current",
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: "mello",
+      },
+      async (jwt_payload, done) => {
+        console.log(jwt_payload);
+        try {
+          return done(null, jwt_payload);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
 };
 
 export default initializePassport;
+
+function cookieExtractor(req) {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies["mello"];
+  }
+  return token;
+}
