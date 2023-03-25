@@ -108,7 +108,7 @@ function handleAnchors() {
     anchor.addEventListener("click", (e) => {
       e.preventDefault();
       const id = e.target.id;
-      window.location.href = `/${id}`;
+      window.location.href = "/product" + `/${id}`;
     });
   });
 }

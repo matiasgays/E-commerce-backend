@@ -18,7 +18,6 @@ export const passportCall = (strategy) => {
       if (err) return next(err);
       if (!user) return res.status(401).redirect("/login");
       req.user = user;
-      console.log(req);
       next();
     })(req, res, next);
   };
@@ -26,7 +25,6 @@ export const passportCall = (strategy) => {
 
 export const authorization = (role) => {
   return async (req, res, next) => {
-    console.log(req);
     if (!req.user) return res.status(401).redirect("/login");
     if (req.user.role != "user") return res.status(403).redirect("/login");
     next();

@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import userModel from "../dao/models/userModel.js";
+import userModel from "../dao/mongoDB/models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import dotenv from "dotenv";
 import jwt, { ExtractJwt } from "passport-jwt";
@@ -115,7 +115,6 @@ const initializePassport = () => {
         secretOrKey: "mello",
       },
       async (jwt_payload, done) => {
-        console.log(jwt_payload);
         try {
           return done(null, jwt_payload);
         } catch (error) {

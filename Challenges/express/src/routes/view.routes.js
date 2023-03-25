@@ -20,9 +20,9 @@ viewRouter.get(
   }
 );
 
-// viewRouter.get("/:pid", (req, res) => {
-//   res.render("productDetail", { style: "productDetail.css" });
-// });
+viewRouter.get("/product/:pid", (req, res) => {
+  res.render("productDetail", { style: "productDetail.css" });
+});
 
 viewRouter.get("/cart/:cid", (req, res) => {
   res.render("cartId", { style: "cartId.css" });

@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 const loginRouter = express.Router();
 
 loginRouter.get("/", (req, res) => {
-  console.log("hello");
   return res.render("login", { style: "login.css" });
 });
 
