@@ -57,8 +57,8 @@ class Routers {
 
   handlePolicies = (policies) => (req, res, next) => {
     if (policies[0] === "PUBLIC") return next();
-    console.log(policies);
     const authHeaders = req.headers.authorization;
+    console.log(authHeaders);
     if (!authHeaders) return res.status(401).send({ error: "Unauthorized" });
     const token = authHeaders.split(" ")[1];
     let user = jwt.verify(token, "mello");

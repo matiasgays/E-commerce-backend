@@ -11,12 +11,14 @@ switch (persistence) {
       "./mongo/contacts.mongo.js"
     );
     Contacts = ContactsMongo;
+    console.log("connected to mongo");
     break;
   case "MEMORY":
     const { default: ContactsMemory } = await import(
       "./memory/contacts.memory.js"
     );
     Contacts = ContactsMemory;
+    console.log("connected to memory");
     break;
   default:
     connectDatabase();
