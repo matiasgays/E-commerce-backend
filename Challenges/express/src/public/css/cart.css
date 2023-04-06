@@ -3,9 +3,6 @@ body {
   padding: 0;
   background: linear-gradient(to bottom right, #e3f0ff, #fafcff);
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .Cart-Container {
   width: 100%;

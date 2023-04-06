@@ -1,6 +1,8 @@
 import cartModel from "./models/cart.model.js";
 
 class Cart {
+  constructor() {}
+
   getCart = async () => {
     try {
       const mongoRes = await cartModel.find();
@@ -21,12 +23,12 @@ class Cart {
     }
   };
 
-  updateCartById = async (cid, array) => {
+  updateCartById = async (cid, cart) => {
     try {
       let msg = "";
       const mongoRes = await cartModel.findById(cid);
-      array.forEach(async (pid) => {
-        let pidInCart = mongoRes.products.find((p) => p.id === pid.id);
+      cart.forEach(async (pid) => {
+        let pidInCart = mongoRes.products.find((p) => p.id === pid.product._id);
         if (pidInCart) {
           try {
             const update = { "products.$[elem].quantity": pid.quantity };
@@ -136,22 +138,14 @@ class Cart {
 
   deleteProductInCartById = async (cid, pid) => {
     try {
-      const mongoRes = await cartModel.findById(cid);
-      const pidInCart = mongoRes.products.find((p) => p.id === pid);
-      if (pidInCart) {
-        try {
-          const del = { $pull: { products: { id: pid } } };
-          await cartModel.updateOne({ _id: cid }, del);
-          return {
+      const del = { $pull: { products: { product: pid } } };
+      const response = await cartModel.updateOne({ _id: cid }, del);
+      return response
+        ? {
             error: 0,
             message: "Product successfully deleted from cart",
-          };
-        } catch (error) {
-          throw new Error("Server failed to delete pid in cart");
-        }
-      } else {
-        return { error: 1, message: "Could not found pid" };
-      }
+          }
+        : { error: 1, message: "Could not found pid" };
     } catch (error) {
       throw new Error("Could not found cid");
     }

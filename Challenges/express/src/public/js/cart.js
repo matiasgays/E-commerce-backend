@@ -12,10 +12,9 @@ const fetchCartById = async (req, res) => {
   const url = getCurrentURL();
   const cid = getCartId(url);
   try {
-    const serverRes = await fetch(`http://127.0.0.1:8080/api/cart/${cid}`);
-    const serverResJSON = await serverRes.json();
-    console.log(serverResJSON.payload[0].products);
-    cart.innerHTML = serverResJSON.payload[0].products.map((product) => {
+    const current = await fetch(`http://127.0.0.1:8080/api/cart/${cid}/json`);
+    const currentCart = await current.json();
+    cart.innerHTML = currentCart.payload[0].products.map((product) => {
       return `
                             <div class="Cart-Container">
                                 <div class="Header">
@@ -46,4 +45,34 @@ const fetchCartById = async (req, res) => {
   }
 };
 
+const createTicket = () => {
+  const checkout = document.getElementById("checkout");
+  checkout.addEventListener("click", async () => {
+    try {
+      const url = getCurrentURL();
+      const cid = getCartId(url);
+      const current = await fetch(`http://127.0.0.1:8080/api/cart/${cid}/json`);
+      const currentCart = await current.json();
+      const ticket = await fetch(
+        `http://127.0.0.1:8080/api/cart/${cid}/purchase`,
+        {
+          method: "POST",
+          headers: { "Content-type": "application/json;charset=UTF-8" },
+          body: JSON.stringify(currentCart),
+        }
+      );
+      const ticketJSON = await ticket.json();
+      const { code } = ticketJSON.payload;
+      if (ticket.status === 200) {
+        window.location.href = `/api/cart/${cid}/purchase/${code}`;
+      } else {
+        window.location.href = `/api/cart/${cid}`;
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
+};
+
 fetchCartById();
+createTicket();

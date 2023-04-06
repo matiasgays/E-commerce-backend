@@ -1,5 +1,6 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
+import { passportCall } from "../utils.js";
 
 class Routers {
   constructor() {
@@ -16,6 +17,16 @@ class Routers {
   get(path, policies, ...callbacks) {
     this.router.get(
       path,
+      passportCall("current"),
+      this.handlePolicies(policies),
+      this.generateCustomResponses,
+      this.applyCallbacks(callbacks)
+    );
+  }
+
+  getLogin(path, policies, ...callbacks) {
+    this.router.get(
+      path,
       this.handlePolicies(policies),
       this.generateCustomResponses,
       this.applyCallbacks(callbacks)
@@ -25,6 +36,36 @@ class Routers {
   post(path, policies, ...callbacks) {
     this.router.post(
       path,
+      passportCall("current"),
+      this.handlePolicies(policies),
+      this.generateCustomResponses,
+      this.applyCallbacks(callbacks)
+    );
+  }
+
+  postLogin(path, policies, ...callbacks) {
+    this.router.post(
+      path,
+      this.handlePolicies(policies),
+      this.generateCustomResponses,
+      this.applyCallbacks(callbacks)
+    );
+  }
+
+  put(path, policies, ...callbacks) {
+    this.router.put(
+      path,
+      passportCall("current"),
+      this.handlePolicies(policies),
+      this.generateCustomResponses,
+      this.applyCallbacks(callbacks)
+    );
+  }
+
+  delete(path, policies, ...callbacks) {
+    this.router.delete(
+      path,
+      passportCall("current"),
       this.handlePolicies(policies),
       this.generateCustomResponses,
       this.applyCallbacks(callbacks)
@@ -54,15 +95,11 @@ class Routers {
     next();
   };
 
-  handlePolicies = (policies) => (req, res, next) => {
+  //
+  handlePolicies = (policies) => async (req, res, next) => {
     if (policies[0] === "PUBLIC") return next();
-    const authHeaders = req.headers.authorization;
-    if (!authHeaders) return res.status(401).send({ error: "Unauthorized" });
-    const token = authHeaders.split(" ")[1];
-    const user = jwt.verify(token, "mello");
-    if (!policies.includes(user.role.toUpperCase()))
+    if (!policies.includes(req.user.role.toUpperCase()))
       return res.status(403).send({ error: "User with bad policies" });
-    req.user = user;
     next();
   };
 }

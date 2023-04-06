@@ -23,10 +23,9 @@ export const passportCall = (strategy) => {
   };
 };
 
-export const authorization = (role) => {
+export const authorization = () => {
   return async (req, res, next) => {
     if (!req.user) return res.status(401).redirect("/login");
-    if (req.user.role != "user") return res.status(403).redirect("/login");
     next();
   };
 };

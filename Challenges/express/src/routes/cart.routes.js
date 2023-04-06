@@ -1,4 +1,3 @@
-import express from "express";
 import {
   getCart,
   getCartById,
@@ -9,23 +8,39 @@ import {
   deleteCartById,
   deleteProductInCartById,
 } from "../controllers/cart.controller.js";
+import { getTicket, createTicket } from "../controllers/ticket.controller.js";
+import Routers from "./router.js";
 
-const cartRouter = express.Router();
+class CartRouter extends Routers {
+  init() {
+    this.get("/", ["USER"], getCart);
 
-cartRouter.get("/", getCart);
+    this.get("/:cid/json", ["USER"], getCartById);
 
-cartRouter.get("/:cid", getCartById);
+    this.get("/:cid", ["USER"], (req, res, next) => {
+      res.render("cart", { style: "cart.css" });
+    });
 
-cartRouter.post("/", addProductInCart);
+    this.get("/:cid/purchase/:ticket", ["USER"], (req, res, next) => {
+      res.render("ticket", {});
+    });
 
-cartRouter.post("/:cid/product/:pid", addProductInCartById);
+    this.post("/:cid/purchase/:ticket", ["USER"], getTicket);
 
-cartRouter.put("/:cid", updateCartById);
+    this.post("/:cid/purchase", ["USER"], createTicket);
 
-cartRouter.put("/:cid/product/:pid", updateProductInCartById);
+    this.post("/", ["USER"], addProductInCart);
 
-cartRouter.delete("/:cid", deleteCartById);
+    this.post("/:cid/product/:pid", ["USER"], addProductInCartById);
 
-cartRouter.delete("/:cid/product/:pid", deleteProductInCartById);
+    this.put("/:cid", ["USER"], updateCartById);
 
-export default cartRouter;
+    this.put("/:cid/product/:pid", ["USER"], updateProductInCartById);
+
+    this.delete("/:cid", ["USER"], deleteCartById);
+
+    this.delete("/:cid/product/:pid", ["USER"], deleteProductInCartById);
+  }
+}
+
+export default CartRouter;

@@ -1,10 +1,8 @@
-import Cart from "../dao/mongoDB/Cart.service.js";
-
-const cart = new Cart();
+import { cartService } from "../dao/repository/index.js";
 
 export const getCart = async (req, res, next) => {
   try {
-    const serverRes = await cart.getCart();
+    const serverRes = await cartService.getCart();
     res.send({
       status: 200,
       message: serverRes.message,
@@ -17,11 +15,12 @@ export const getCart = async (req, res, next) => {
 
 export const getCartById = async (req, res, next) => {
   try {
-    const serverRes = await cart.getCartById(req.params.cid);
+    const serverRes = await cartService.getCartById(req.params.cid);
     res.send({
       status: 200,
       message: serverRes.message,
       payload: serverRes.payload,
+      user: req.user,
     });
   } catch (error) {
     res.send({ status: 500, message: "Cannot get cart: " + error });
@@ -30,7 +29,7 @@ export const getCartById = async (req, res, next) => {
 
 export const addProductInCart = async (req, res, next) => {
   try {
-    const serverRes = await cart.addProductInCart(req.body);
+    const serverRes = await cartService.addProductInCart(req.body);
     !serverRes.error
       ? res.send({ status: 200, message: serverRes.message })
       : res.send({ status: 400, message: serverRes.message });
@@ -44,7 +43,7 @@ export const addProductInCart = async (req, res, next) => {
 
 export const addProductInCartById = async (req, res, next) => {
   try {
-    const serverRes = await cart.addProductInCartById(
+    const serverRes = await cartService.addProductInCartById(
       req.params.cid,
       req.params.pid
     );
@@ -59,7 +58,10 @@ export const addProductInCartById = async (req, res, next) => {
 
 export const updateCartById = async (req, res, next) => {
   try {
-    const serverRes = await cart.updateCartById(req.params.cid, req.body);
+    const serverRes = await cartService.updateCartById(
+      req.params.cid,
+      req.body
+    );
     res.send({
       status: 200,
       message: serverRes.message,
@@ -74,7 +76,7 @@ export const updateCartById = async (req, res, next) => {
 
 export const updateProductInCartById = async (req, res, next) => {
   try {
-    const serverRes = await cart.updateProductInCartById(
+    const serverRes = await cartService.updateProductInCartById(
       req.params.cid,
       req.params.pid,
       req.body.quantity
@@ -92,7 +94,7 @@ export const updateProductInCartById = async (req, res, next) => {
 
 export const deleteCartById = async (req, res, next) => {
   try {
-    const serverRes = await cart.deleteCartById(req.params.cid);
+    const serverRes = await cartService.deleteCartById(req.params.cid);
     res.send({ status: 200, message: serverRes.message });
   } catch (error) {
     res.send({
@@ -104,7 +106,7 @@ export const deleteCartById = async (req, res, next) => {
 
 export const deleteProductInCartById = async (req, res, next) => {
   try {
-    const serverRes = await cart.deleteProductInCartById(
+    const serverRes = await cartService.deleteProductInCartById(
       req.params.cid,
       req.params.pid
     );

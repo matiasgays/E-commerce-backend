@@ -27,7 +27,7 @@ const initializePassport = () => {
       },
       async (req, email, password, done) => {
         try {
-          const { firstName, lastName, age, cartId, role } = req.body;
+          const { firstName, lastName, age } = req.body;
           const user = await userModel.findOne({ email });
           if (user) {
             console.log("User already exists");
@@ -39,6 +39,8 @@ const initializePassport = () => {
             age,
             email,
             password: createHash(password),
+            role:
+              firstName === "Admin" && lastName === "Coder" ? "admin" : "user",
           };
           const result = await userModel.create(newUser);
           return done(null, result);

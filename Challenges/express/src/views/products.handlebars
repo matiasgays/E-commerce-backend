@@ -1,7 +1,8 @@
 <ul>
   <li><a href="#home">Welcome
-      {{profile.firstName}}
-      {{profile.lastName}}</a></li>
+      {{profile.fullName}}
+    </a>
+  </li>
   {{#if profile.admin}}
     <li><a href="#contact">Config</a></li>
   {{/if}}

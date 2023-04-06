@@ -1,6 +1,4 @@
-import Product from "../dao/mongoDB/Product.service.js";
-
-const newProduct = new Product();
+import { productService } from "../dao/repository/index.js";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -13,7 +11,7 @@ export const getProducts = async (req, res, next) => {
 
 export const getProductById = async (req, res, next) => {
   try {
-    const serverRes = await newProduct.getProductById(req.params.pid);
+    const serverRes = await productService.getProductById(req.params.pid);
     res.send({
       status: 200,
       message: serverRes.message,
@@ -26,7 +24,7 @@ export const getProductById = async (req, res, next) => {
 
 export const addProduct = async (req, res, next) => {
   try {
-    const serverRes = await newProduct.addProduct(req.body);
+    const serverRes = await productService.addProduct(req.body);
     !serverRes.error
       ? res.send({ status: 200, message: serverRes.message })
       : res.send({ status: 400, message: serverRes.message });
@@ -37,7 +35,10 @@ export const addProduct = async (req, res, next) => {
 
 export const updateProduct = async (req, res, next) => {
   try {
-    const serverRes = await newProduct.updateProduct(req.params.pid, req.body);
+    const serverRes = await productService.updateProduct(
+      req.params.pid,
+      req.body
+    );
     !serverRes.error
       ? res.send({ status: 200, message: serverRes.message })
       : res.send({ status: 400, message: serverRes.message });
@@ -48,7 +49,7 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
   try {
-    const serverRes = await newProduct.deleteProduct(req.params.pid);
+    const serverRes = await productService.deleteProduct(req.params.pid);
     !serverRes.error
       ? res.send({ status: 200, message: serverRes.message })
       : res.send({ status: 400, message: serverRes.message });
@@ -62,7 +63,12 @@ const getProductsAsync = async (req, res) => {
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   try {
-    const serverRes = await newProduct.getProducts(limit, page, sort, query);
+    const serverRes = await productService.getProducts(
+      limit,
+      page,
+      sort,
+      query
+    );
     return {
       status: 200,
       message: serverRes.message,

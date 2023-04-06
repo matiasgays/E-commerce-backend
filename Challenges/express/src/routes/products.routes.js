@@ -1,4 +1,3 @@
-import express from "express";
 import {
   getProductById,
   addProduct,
@@ -6,17 +5,20 @@ import {
   deleteProduct,
   getProducts,
 } from "../controllers/products.controller.js";
+import Routers from "./router.js";
 
-const productsRouter = express.Router();
+class ProductsRouter extends Routers {
+  init() {
+    this.get("/", ["PUBLIC"], getProducts);
 
-productsRouter.get("/", getProducts);
+    this.get("/:pid", ["PUBLIC"], getProductById);
 
-productsRouter.get("/:pid", getProductById);
+    this.post("/", ["ADMIN"], addProduct);
 
-productsRouter.post("/", addProduct);
+    this.put("/:pid", ["ADMIN"], updateProduct);
 
-productsRouter.put("/:pid", updateProduct);
+    this.delete("/:pid", ["ADMIN"], deleteProduct);
+  }
+}
 
-productsRouter.delete("/:pid", deleteProduct);
-
-export default productsRouter;
+export default ProductsRouter;

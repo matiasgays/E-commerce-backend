@@ -1,20 +1,23 @@
-import express from "express";
 import passport from "passport";
+import Routers from "./router.js";
 
-const signupRouter = express.Router();
+class SignupRouter extends Routers {
+  init() {
+    this.get("/", ["PUBLIC"], (req, res) => {
+      res.render("signup", { style: "signup.css" });
+    });
 
-signupRouter.get("/", (req, res) => {
-  res.render("signup", { style: "signup.css" });
-});
-
-signupRouter.post(
-  "/",
-  passport.authenticate("signup", {
-    failureRedirect: "/signup",
-  }),
-  (req, res) => {
-    return res.status(201).send();
+    this.post(
+      "/",
+      ["PUBLIC"],
+      passport.authenticate("signup", {
+        failureRedirect: "/signup",
+      }),
+      (req, res) => {
+        return res.status(201).send();
+      }
+    );
   }
-);
+}
 
-export default signupRouter;
+export default SignupRouter;

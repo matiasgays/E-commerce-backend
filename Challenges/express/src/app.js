@@ -1,16 +1,15 @@
 import express from "express";
-import productsRouter from "./routes/products.routes.js";
-import cartRouter from "./routes/cart.routes.js";
+import ProductsRouter from "./routes/products.routes.js";
+import CartRouter from "./routes/cart.routes.js";
 import viewRouter from "./routes/view.routes.js";
-import messagesRouter from "./routes/messages.routes.js";
+import MessagesRouter from "./routes/messages.routes.js";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import messagesModel from "./dao/mongoDB/models/messages.model.js";
 import __dirname from "./utils.js";
-import loginRouter from "./routes/login.routes.js";
-import signupRouter from "./routes/signup.routes.js";
+import LoginRouter from "./routes/login.routes.js";
+import SignupRouter from "./routes/signup.routes.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
@@ -21,17 +20,18 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
-const MONGO_USER_NAME = process.env.MONGO_USER_NAME;
-const MONGO_PSW = process.env.MONGO_PSW;
-const MONGO_DATABASE = process.env.MONGO_DATABASE;
-const URI = `mongodb+srv://${MONGO_USER_NAME}:${MONGO_PSW}@cluster0.kpm0q.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority`;
+
 const sessionsRouter = new SessionRouter();
+const productsRouter = new ProductsRouter();
+const signupRouter = new SignupRouter();
+const cartRouter = new CartRouter();
+const messagesRouter = new MessagesRouter();
+const loginRouter = new LoginRouter();
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-connectDatabase();
 const io = new Server(httpServer);
 
 app.engine("handlebars", handlebars.engine());
@@ -54,12 +54,12 @@ app.use(
 initializePassport();
 app.use(passport.initialize());
 
-app.use("/api/products", productsRouter);
-app.use("/api/cart", cartRouter);
+app.use("/api/products", productsRouter.getRouter());
+app.use("/api/cart", cartRouter.getRouter());
 app.use("/", viewRouter);
-app.use("/messages", messagesRouter);
-app.use("/login", loginRouter);
-app.use("/signup", signupRouter);
+app.use("/messages", messagesRouter.getRouter());
+app.use("/login", loginRouter.getRouter());
+app.use("/signup", signupRouter.getRouter());
 app.use("/sessions", sessionsRouter.getRouter());
 
 io.on("connection", (socket) => {
@@ -88,15 +88,3 @@ io.on("connection", (socket) => {
     postMessage();
   });
 });
-
-function connectDatabase() {
-  const uri = `mongodb+srv://${MONGO_USER_NAME}:${MONGO_PSW}@cluster0.kpm0q.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority`;
-  mongoose.connect(uri, (error) => {
-    error
-      ? console.log({
-          status: 500,
-          message: "Cannot connect to database: " + error,
-        })
-      : console.log({ status: 200, message: "Connected to database" });
-  });
-}

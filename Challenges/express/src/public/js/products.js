@@ -124,11 +124,12 @@ function handleAddToCartButtons() {
         const serverRes = await fetch(API_CART + endpoint, {
           method: "POST",
           headers: { "Content-type": "application/json;charset=UTF-8" },
+          body: JSON.stringify({ role: "user" }),
         });
         if (serverRes.status === 200) {
           alert(`Product added successfully to cart _id: ${cid}`);
-        } else if (serverRes.status === 404) {
-          alert("Could not load user");
+        } else {
+          alert("User's role not authorized");
         }
       } catch (error) {
         throw new Error(error);
