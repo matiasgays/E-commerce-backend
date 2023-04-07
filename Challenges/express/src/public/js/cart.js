@@ -51,14 +51,14 @@ const createTicket = () => {
     try {
       const url = getCurrentURL();
       const cid = getCartId(url);
-      const current = await fetch(`http://127.0.0.1:8080/api/cart/${cid}/json`);
-      const currentCart = await current.json();
+      const cart = await fetch(`http://127.0.0.1:8080/api/cart/${cid}/json`);
+      const { payload } = await cart.json();
       const ticket = await fetch(
         `http://127.0.0.1:8080/api/cart/${cid}/purchase`,
         {
           method: "POST",
           headers: { "Content-type": "application/json;charset=UTF-8" },
-          body: JSON.stringify(currentCart),
+          body: JSON.stringify(payload),
         }
       );
       const ticketJSON = await ticket.json();

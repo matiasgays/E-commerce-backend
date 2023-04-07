@@ -2,59 +2,49 @@ import { productService } from "../dao/repository/index.js";
 
 export const getProducts = async (req, res, next) => {
   try {
-    const { status, payload } = await getProductsAsync(req, res);
-    res.status(status).send({ payload });
+    const { payload } = await getProductsAsync(req, res);
+    res.sendSuccess(payload);
   } catch (error) {
-    throw new Error(error);
+    res.sendError(error);
   }
 };
 
 export const getProductById = async (req, res, next) => {
   try {
-    const serverRes = await productService.getProductById(req.params.pid);
-    res.send({
-      status: 200,
-      message: serverRes.message,
-      payload: serverRes.payload,
-    });
+    const { payload } = await productService.getProductById(req.params.pid);
+    res.sendSuccess(payload);
   } catch (error) {
-    res.send({ status: 500, message: "Could not get products: " + error });
+    res.sendError(error);
   }
 };
 
 export const addProduct = async (req, res, next) => {
   try {
-    const serverRes = await productService.addProduct(req.body);
-    !serverRes.error
-      ? res.send({ status: 200, message: serverRes.message })
-      : res.send({ status: 400, message: serverRes.message });
+    const { payload } = await productService.addProduct(req.body);
+    res.sendSuccess(payload);
   } catch (error) {
-    res.send({ status: 500, message: "Could not add product: " + error });
+    res.sendError(error);
   }
 };
 
 export const updateProduct = async (req, res, next) => {
   try {
-    const serverRes = await productService.updateProduct(
+    const { payload } = await productService.updateProduct(
       req.params.pid,
       req.body
     );
-    !serverRes.error
-      ? res.send({ status: 200, message: serverRes.message })
-      : res.send({ status: 400, message: serverRes.message });
+    res.sendSuccess(payload);
   } catch (error) {
-    res.send({ status: 500, message: "Could not update product: " + error });
+    res.sendError(error);
   }
 };
 
 export const deleteProduct = async (req, res, next) => {
   try {
-    const serverRes = await productService.deleteProduct(req.params.pid);
-    !serverRes.error
-      ? res.send({ status: 200, message: serverRes.message })
-      : res.send({ status: 400, message: serverRes.message });
+    const { payload } = await productService.deleteProduct(req.params.pid);
+    res.sendSuccess(payload);
   } catch (error) {
-    res.send({ status: 500, message: "Could not delete product: " + error });
+    res.sendError(error);
   }
 };
 
@@ -63,18 +53,14 @@ const getProductsAsync = async (req, res) => {
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   try {
-    const serverRes = await productService.getProducts(
+    const { payload } = await productService.getProducts(
       limit,
       page,
       sort,
       query
     );
-    return {
-      status: 200,
-      message: serverRes.message,
-      payload: serverRes.payload,
-    };
+    return { payload };
   } catch (error) {
-    res.send({ status: 500, message: "Could not get products: " + error });
+    return { error };
   }
 };

@@ -14,20 +14,7 @@ class LoginRouter extends Routers {
       passport.authenticate("login", {
         failureRedirect: "/login",
       }),
-      (req, res) => {
-        const { firstName, lastName, email, password, role } = req.user;
-        let token = jwt.sign(
-          { firstName, lastName, email, password, role },
-          "mello",
-          {
-            expiresIn: "24h",
-          }
-        );
-        return res
-          .status(201)
-          .cookie("mello", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
-          .send({ message: "Logged in successfully" });
-      }
+      signCookie
     );
 
     this.getLogin(
@@ -49,3 +36,17 @@ class LoginRouter extends Routers {
 }
 
 export default LoginRouter;
+
+const signCookie = (req, res) => {
+  const { firstName, lastName, email, password, role } = req.user;
+  let token = jwt.sign(
+    { firstName, lastName, email, password, role },
+    "mello",
+    {
+      expiresIn: "24h",
+    }
+  );
+  return res
+    .cookie("mello", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
+    .sendSuccess();
+};

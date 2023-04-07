@@ -23,18 +23,18 @@ class Product {
     };
     try {
       const mongoRes = await productModel.paginate(query, options);
-      return { message: "Products found", payload: mongoRes };
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Server failed to find products");
+      return { error };
     }
   };
 
   getProductById = async (pid) => {
     try {
       const mongoRes = await productModel.findById(pid);
-      return { message: "pid found", payload: mongoRes };
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not found pid");
+      return { error };
     }
   };
 
@@ -60,45 +60,42 @@ class Product {
       !stock ||
       !status
     )
-      return { error: 1, message: "arguments can't be falsy" };
+      return { payload: "arguments can't be falsy" };
 
     try {
-      const mongoRes = await productModel.findOne({ code: code });
+      let mongoRes = await productModel.findOne({ code: code });
       if (mongoRes)
         return {
-          error: 1,
-          message:
+          payload:
             "The product's code you are trying to add is already created",
         };
 
       try {
-        await productModel.create(product);
-        return { error: 0, message: "product successfully added" };
+        mongoRes = await productModel.create(product);
+        return { paylaod: mongoRes };
       } catch (error) {
-        throw new Error("Server failed to add product");
+        return { error };
       }
     } catch (error) {
-      throw new Error("Server failed to find product");
+      return { error };
     }
   };
 
   updateProduct = async (pid, obj) => {
     try {
       const mongoRes = await productModel.findByIdAndUpdate(pid, obj);
-      if (!mongoRes) return { error: 1, message: "Could not found pid" };
-      return { error: 0, message: "product successfully updated" };
+      return { paylaod: mongoRes };
     } catch (error) {
-      throw new Error("Server failed to update product");
+      return { error };
     }
   };
 
   deleteProduct = async (pid) => {
     try {
       const mongoRes = await productModel.findByIdAndRemove(pid);
-      if (!mongoRes) return { error: 1, message: "Could not found pid" };
-      return { error: 0, message: "product successfully deleted" };
+      return { paylaod: mongoRes };
     } catch (error) {
-      throw new Error("Server failed to delete product");
+      return { error };
     }
   };
 }

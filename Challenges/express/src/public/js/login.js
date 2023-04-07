@@ -11,7 +11,7 @@ login.addEventListener("click", async (e) => {
       headers: { "Content-type": "application/json;charset=UTF-8" },
       body: JSON.stringify({ email, password }),
     });
-    if (serverRes.status === 201) {
+    if (serverRes.status === 200) {
       window.location.href = "/";
     } else {
       alert("Authetincation failed");

@@ -86,6 +86,7 @@ class Routers {
     res.sendSuccess = (payload) => {
       res.send({ status: 200, payload });
     };
+
     res.sendError = (error) => {
       res.send({ status: 500, error });
     };

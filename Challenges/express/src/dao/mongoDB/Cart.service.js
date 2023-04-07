@@ -6,9 +6,9 @@ class Cart {
   getCart = async () => {
     try {
       const mongoRes = await cartModel.find();
-      return { message: "Cart found", payload: mongoRes };
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Server failed to find cart");
+      return { error };
     }
   };
 
@@ -17,137 +17,126 @@ class Cart {
       const mongoRes = await cartModel
         .find({ _id: cid })
         .populate("products.product");
-      return { message: "cid found", payload: mongoRes };
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not found cid");
+      return { error };
     }
   };
 
   updateCartById = async (cid, cart) => {
     try {
       let msg = "";
-      const mongoRes = await cartModel.findById(cid);
+      const cartFound = await cartModel.findById(cid);
       cart.forEach(async (pid) => {
-        let pidInCart = mongoRes.products.find((p) => p.id === pid.product._id);
+        let pidInCart = cartFound.products.find(
+          (p) => p.id === pid.product._id
+        );
         if (pidInCart) {
           try {
             const update = { "products.$[elem].quantity": pid.quantity };
-            await cartModel
-              .updateOne({ _id: cid }, update, {
-                arrayFilters: [{ "elem.product": pid.id }],
-              })
-              .then((msg += `${pid.id} successfully updated. `));
+            const mongoRes = await cartModel.updateOne({ _id: cid }, update, {
+              arrayFilters: [{ "elem.product": pid.id }],
+            });
+            return { payload: mongoRes };
           } catch (error) {
-            throw new Error("Server failed to update pid in cart");
+            return { error };
           }
         } else {
           msg += `Could not found ${pid.id}`;
         }
       });
-      return { message: msg };
+      return { payload: msg };
     } catch (error) {
-      throw new Error("Could not found cid");
+      return { error };
     }
   };
 
   deleteCartById = async (cid) => {
     try {
-      await cartModel.findByIdAndRemove(cid);
-      return { message: "Cart successfully deleted" };
+      const mongoRes = await cartModel.findByIdAndRemove(cid);
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not found cid");
+      return { error };
     }
   };
 
   addProductInCart = async (cart) => {
     const { id, quantity } = cart.products[0];
-    if (!id || !quantity)
-      return { error: 1, message: "arguments can't be falsy" };
+    if (!id || !quantity) return { payload: "arguments can't be falsy" };
 
     try {
-      await cartModel.create({
+      const mongoRes = await cartModel.create({
         products: { quantity, product: id },
       });
-      return { error: 0, message: "product successfully added" };
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Server failed to add product to cart");
+      return { error };
     }
   };
 
   addProductInCartById = async (cid, pid) => {
     try {
-      const mongoRes = await cartModel.findById(cid);
-      const pidInCart = mongoRes.products.find((p) => {
+      const cartFound = await cartModel.findById(cid);
+      const pidInCart = cartFound.products.find((p) => {
         let id = p.product.toString().replace(/ObjectId\("(.*)"\)/, "$1");
         return id === pid;
       });
       if (pidInCart) {
         try {
           const update = { $inc: { "products.$[elem].quantity": 1 } };
-          await cartModel.updateOne({ _id: cid }, update, {
+          const mongoRes = await cartModel.updateOne({ _id: cid }, update, {
             arrayFilters: [{ "elem.product": pid }],
           });
-          return {
-            message:
-              "Product is already in cart.  Product's quantity +1 successfully added",
-          };
+          return { payload: mongoRes };
         } catch (error) {
-          throw new Error("Server failed to update pid in cart");
+          return { error };
         }
       } else {
         try {
           const insert = { $push: { products: { product: pid, quantity: 1 } } };
-          await cartModel.updateOne({ _id: cid }, insert);
-          return { message: "Product successfully added to cart" };
+          const mongoRes = await cartModel.updateOne({ _id: cid }, insert);
+          return { payload: mongoRes };
         } catch (error) {
-          throw new Error("Server failed to add product to cart");
+          return { error };
         }
       }
     } catch (error) {
-      throw new Error("Could not found cid");
+      return { error };
     }
   };
 
   updateProductInCartById = async (cid, pid, quantity) => {
     try {
-      const mongoRes = await cartModel.findById(cid);
-      const pidInCart = mongoRes.products.find((p) => {
+      const cartFound = await cartModel.findById(cid);
+      const pidInCart = cartFound.products.find((p) => {
         let id = p.product.toString().replace(/ObjectId\("(.*)"\)/, "$1");
         return id === pid;
       });
       if (pidInCart) {
         try {
           const update = { "products.$[elem].quantity": quantity };
-          await cartModel.updateOne({ _id: cid }, update, {
+          const mongoRes = await cartModel.updateOne({ _id: cid }, update, {
             arrayFilters: [{ "elem.product": pid }],
           });
-          return {
-            error: 0,
-            message: `Product is already in cart.  Product's quantity ${quantity} successfully added`,
-          };
+          return { payload: mongoRes };
         } catch (error) {
-          throw new Error("Server failed to update pid in cart");
+          return { error };
         }
       } else {
-        return { error: 1, message: "Could not found pid" };
+        return { error };
       }
     } catch (error) {
-      throw new Error("Could not found cid");
+      return { error };
     }
   };
 
   deleteProductInCartById = async (cid, pid) => {
     try {
       const del = { $pull: { products: { product: pid } } };
-      const response = await cartModel.updateOne({ _id: cid }, del);
-      return response
-        ? {
-            error: 0,
-            message: "Product successfully deleted from cart",
-          }
-        : { error: 1, message: "Could not found pid" };
+      const mongoRes = await cartModel.updateOne({ _id: cid }, del);
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not found cid");
+      return { error };
     }
   };
 }

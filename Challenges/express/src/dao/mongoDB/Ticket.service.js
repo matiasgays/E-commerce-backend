@@ -5,15 +5,17 @@ class Ticket {
 
   getTicketByCode = async (code) => {
     try {
-      return await ticketModel.findOne({ code: code });
+      const mongoRes = await ticketModel.findOne({ code: code });
+      return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not create ticket");
+      return { error };
     }
   };
 
   createTicket = async (ticket) => {
     try {
-      return await ticketModel.create(ticket);
+      const mongoRes = await ticketModel.create(ticket);
+      return { payload: mongoRes };
     } catch (error) {
       throw new Error("Could not create ticket");
     }
@@ -21,9 +23,10 @@ class Ticket {
 
   deleteAll = async () => {
     try {
-      return await ticketModel.deleteMany({
+      const mongoRes = await ticketModel.deleteMany({
         purchaser: "ing.matiasgays@gmail.com",
       });
+      return { payload: mongoRes };
     } catch (error) {
       throw new Error("Could not create ticket");
     }

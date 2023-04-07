@@ -14,7 +14,7 @@ class SignupRouter extends Routers {
         failureRedirect: "/signup",
       }),
       (req, res) => {
-        return res.status(201).send();
+        res.sendSuccess();
       }
     );
   }

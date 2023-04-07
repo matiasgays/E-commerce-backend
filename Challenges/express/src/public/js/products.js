@@ -35,7 +35,7 @@ async function getProductsList() {
   const params = getParams(getCurrentURL());
   const query = convertParamsToQuery(params);
   try {
-    await fetchProducts(API_PRODUCTS + query);
+    return await fetchProducts(API_PRODUCTS + query);
   } catch (error) {
     throw new Error(error);
   }
