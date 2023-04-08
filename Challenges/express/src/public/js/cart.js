@@ -13,8 +13,8 @@ const fetchCartById = async (req, res) => {
   const cid = getCartId(url);
   try {
     const current = await fetch(`http://127.0.0.1:8080/api/cart/${cid}/json`);
-    const currentCart = await current.json();
-    cart.innerHTML = currentCart.payload[0].products.map((product) => {
+    const { payload } = await current.json();
+    cart.innerHTML = payload.products.map((product) => {
       return `
                             <div class="Cart-Container">
                                 <div class="Header">

@@ -11,9 +11,7 @@ class LoginRouter extends Routers {
     this.postLogin(
       "/",
       ["PUBLIC"],
-      passport.authenticate("login", {
-        failureRedirect: "/login",
-      }),
+      passport.authenticate("login", { failureRedirect: "/login" }),
       signCookie
     );
 
@@ -48,5 +46,5 @@ const signCookie = (req, res) => {
   );
   return res
     .cookie("mello", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
-    .sendSuccess();
+    .sendSuccess({});
 };

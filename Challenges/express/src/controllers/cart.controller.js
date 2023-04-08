@@ -11,8 +11,8 @@ export const getCart = async (req, res, next) => {
 
 export const getCartById = async (req, res, next) => {
   try {
-    const { payload } = await cartService.getCartById(req.params.cid);
-    payload.user = req.user;
+    let { payload } = await cartService.getCartById(req.params.cid);
+    payload = { ...payload[0]._doc, user: req.user };
     res.sendSuccess(payload);
   } catch (error) {
     res.sendError(error);
