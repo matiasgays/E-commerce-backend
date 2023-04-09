@@ -1,4 +1,5 @@
 import { productService } from "../dao/repository/index.js";
+import { mockingProduct } from "../utils.js";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -16,6 +17,15 @@ export const getProductById = async (req, res, next) => {
   } catch (error) {
     res.sendError(error);
   }
+};
+
+export const mockingProducts = (req, res) => {
+  const products = [];
+  const numOfProducts = 100;
+  for (let i = 0; i < numOfProducts; i++) {
+    products.push(mockingProduct());
+  }
+  res.sendSuccess(products);
 };
 
 export const addProduct = async (req, res, next) => {

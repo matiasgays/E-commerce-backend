@@ -24,7 +24,7 @@ class Routers {
     );
   }
 
-  getLogin(path, policies, ...callbacks) {
+  getPublic(path, policies, ...callbacks) {
     this.router.get(
       path,
       this.handlePolicies(policies),
@@ -43,7 +43,7 @@ class Routers {
     );
   }
 
-  postLogin(path, policies, ...callbacks) {
+  postPublic(path, policies, ...callbacks) {
     this.router.post(
       path,
       this.handlePolicies(policies),

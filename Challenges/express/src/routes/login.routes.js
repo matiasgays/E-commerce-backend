@@ -4,25 +4,25 @@ import Routers from "./router.js";
 
 class LoginRouter extends Routers {
   init() {
-    this.getLogin("/", ["PUBLIC"], (req, res) => {
+    this.getPublic("/", ["PUBLIC"], (req, res) => {
       return res.render("login", { style: "login.css" });
     });
 
-    this.postLogin(
+    this.postPublic(
       "/",
       ["PUBLIC"],
       passport.authenticate("login", { failureRedirect: "/login" }),
       signCookie
     );
 
-    this.getLogin(
+    this.getPublic(
       "/github",
       ["PUBLIC"],
       passport.authenticate("github", { scope: ["user:email"] }),
       async (req, res) => {}
     );
 
-    this.getLogin(
+    this.getPublic(
       "/githubcallback",
       ["PUBLIC"],
       passport.authenticate("github", { failureRedirect: "/login" }),

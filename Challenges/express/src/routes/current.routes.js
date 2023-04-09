@@ -6,7 +6,7 @@ class CurrentRouter extends Routers {
   init() {
     this.get("/", ["USER"], authorization(), (req, res) => {
       const profile = new UserDTO(req.user);
-      res.render("products", { style: "index.css", profile });
+      res.render("products", { style: "products.css", profile });
     });
 
     this.get("/product/:pid", ["USER"], (req, res) => {
