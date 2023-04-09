@@ -24,28 +24,10 @@ class Routers {
     );
   }
 
-  getPublic(path, policies, ...callbacks) {
-    this.router.get(
-      path,
-      this.handlePolicies(policies),
-      this.generateCustomResponses,
-      this.applyCallbacks(callbacks)
-    );
-  }
-
   post(path, policies, ...callbacks) {
     this.router.post(
       path,
       passportCall("current"),
-      this.handlePolicies(policies),
-      this.generateCustomResponses,
-      this.applyCallbacks(callbacks)
-    );
-  }
-
-  postPublic(path, policies, ...callbacks) {
-    this.router.post(
-      path,
       this.handlePolicies(policies),
       this.generateCustomResponses,
       this.applyCallbacks(callbacks)
@@ -98,7 +80,9 @@ class Routers {
 
   //
   handlePolicies = (policies) => async (req, res, next) => {
-    if (policies[0] === "PUBLIC") return next();
+    if (!req.user.role && policies.includes("PUBLIC")) return next();
+    if (!req.user.role && !policies.includes("PUBLIC"))
+      return res.status(401).redirect("/login");
     if (!policies.includes(req.user.role.toUpperCase()))
       return res.status(403).send({ error: "User with bad policies" });
     next();
