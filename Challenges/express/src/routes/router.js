@@ -80,9 +80,10 @@ class Routers {
 
   //
   handlePolicies = (policies) => async (req, res, next) => {
-    if (!req.user.role && policies.includes("PUBLIC")) return next();
-    if (!req.user.role && !policies.includes("PUBLIC"))
+    if (!req.user.role) {
+      if (policies.includes("PUBLIC")) return next();
       return res.status(401).redirect("/login");
+    }
     if (!policies.includes(req.user.role.toUpperCase()))
       return res.status(403).send({ error: "User with bad policies" });
     next();
