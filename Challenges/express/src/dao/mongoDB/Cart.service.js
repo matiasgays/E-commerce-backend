@@ -8,7 +8,7 @@ class Cart {
       const mongoRes = await cartModel.find();
       return { payload: mongoRes };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -17,9 +17,10 @@ class Cart {
       const mongoRes = await cartModel
         .find({ _id: cid })
         .populate("products.product");
+      if (!mongoRes) return { code: 400, payload: error };
       return { payload: mongoRes };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -39,15 +40,15 @@ class Cart {
             });
             return { payload: mongoRes };
           } catch (error) {
-            return { error };
+            return { code: 500, payload: error };
           }
         } else {
-          msg += `Could not found ${pid.id}`;
+          return { code: 404, payload: `Could not found ${pid.id}` };
         }
       });
       return { payload: msg };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -56,21 +57,21 @@ class Cart {
       const mongoRes = await cartModel.findByIdAndRemove(cid);
       return { payload: mongoRes };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
   addProductInCart = async (cart) => {
     const { id, quantity } = cart.products[0];
-    if (!id || !quantity) return { payload: "arguments can't be falsy" };
-
+    if (!id || !quantity)
+      return { code: 400, payload: `Could not found ${pid.id}` };
     try {
       const mongoRes = await cartModel.create({
         products: { quantity, product: id },
       });
       return { payload: mongoRes };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -89,7 +90,7 @@ class Cart {
           });
           return { payload: mongoRes };
         } catch (error) {
-          return { error };
+          return { code: 500, payload: error };
         }
       } else {
         try {
@@ -97,11 +98,11 @@ class Cart {
           const mongoRes = await cartModel.updateOne({ _id: cid }, insert);
           return { payload: mongoRes };
         } catch (error) {
-          return { error };
+          return { code: 500, payload: error };
         }
       }
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -120,13 +121,13 @@ class Cart {
           });
           return { payload: mongoRes };
         } catch (error) {
-          return { error };
+          return { code: 500, payload: error };
         }
       } else {
-        return { error };
+        return { code: 500, payload: error };
       }
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -136,7 +137,7 @@ class Cart {
       const mongoRes = await cartModel.updateOne({ _id: cid }, del);
       return { payload: mongoRes };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 }

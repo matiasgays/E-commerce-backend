@@ -1,21 +1,22 @@
 import { productService } from "../dao/repository/index.js";
-import { mockingProduct } from "../utils.js";
+import { mockingProduct, handleRes } from "../utils.js";
 
 export const getProducts = async (req, res, next) => {
   try {
-    const { payload } = await getProductsAsync(req, res);
-    res.sendSuccess(payload);
+    return await getProductsAsync(req, res);
   } catch (error) {
-    res.sendError(error);
+    res.sendError(500, error);
   }
 };
 
 export const getProductById = async (req, res, next) => {
   try {
-    const { payload } = await productService.getProductById(req.params.pid);
-    res.sendSuccess(payload);
+    const { code, payload } = await productService.getProductById(
+      req.params.pid
+    );
+    handleRes(res, code, payload);
   } catch (error) {
-    res.sendError(error);
+    res.sendError(500, error);
   }
 };
 
@@ -30,31 +31,33 @@ export const mockingProducts = (req, res) => {
 
 export const addProduct = async (req, res, next) => {
   try {
-    const { payload } = await productService.addProduct(req.body);
-    res.sendSuccess(payload);
+    const { code, payload } = await productService.addProduct(req.body);
+    handleRes(res, code, payload);
   } catch (error) {
-    res.sendError(error);
+    res.sendError(500, error);
   }
 };
 
 export const updateProduct = async (req, res, next) => {
   try {
-    const { payload } = await productService.updateProduct(
+    const { code, payload } = await productService.updateProduct(
       req.params.pid,
       req.body
     );
-    res.sendSuccess(payload);
+    handleRes(res, code, payload);
   } catch (error) {
-    res.sendError(error);
+    res.sendError(500, error);
   }
 };
 
 export const deleteProduct = async (req, res, next) => {
   try {
-    const { payload } = await productService.deleteProduct(req.params.pid);
-    res.sendSuccess(payload);
+    const { code, payload } = await productService.deleteProduct(
+      req.params.pid
+    );
+    handleRes(res, code, payload);
   } catch (error) {
-    res.sendError(error);
+    res.sendError(500, error);
   }
 };
 
@@ -63,14 +66,14 @@ const getProductsAsync = async (req, res) => {
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   try {
-    const { payload } = await productService.getProducts(
+    const { code, payload } = await productService.getProducts(
       limit,
       page,
       sort,
       query
     );
-    return { payload };
+    handleRes(res, code, payload);
   } catch (error) {
-    return { error };
+    res.sendError(500, error);
   }
 };

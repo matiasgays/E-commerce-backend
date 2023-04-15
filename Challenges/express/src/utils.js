@@ -43,4 +43,10 @@ export const mockingProduct = () => {
   };
 };
 
+export const handleRes = (res, code, payload) => {
+  parseInt(code) >= 400
+    ? res.sendError(code, payload)
+    : res.sendSuccess(payload);
+};
+
 export default __dirname;

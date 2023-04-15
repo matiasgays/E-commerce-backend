@@ -9,7 +9,7 @@ const createTicket = async () => {
       {
         method: "POST",
         headers: { "Content-type": "application/json;charset=UTF-8" },
-        body: JSON.stringify({ code: ticketCode }),
+        body: JSON.stringify({ codeNumber: ticketCode }),
       }
     );
     const newTicketJSON = await newTicket.json();

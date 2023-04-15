@@ -8,7 +8,7 @@ class Ticket {
       const mongoRes = await ticketModel.findOne({ code: code });
       return { payload: mongoRes };
     } catch (error) {
-      return { error };
+      return { code: 500, payload: error };
     }
   };
 
@@ -17,7 +17,7 @@ class Ticket {
       const mongoRes = await ticketModel.create(ticket);
       return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not create ticket");
+      return { code: 500, payload: error };
     }
   };
 
@@ -28,7 +28,7 @@ class Ticket {
       });
       return { payload: mongoRes };
     } catch (error) {
-      throw new Error("Could not create ticket");
+      return { code: 500, payload: error };
     }
   };
 }

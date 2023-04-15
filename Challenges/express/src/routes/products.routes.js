@@ -10,11 +10,11 @@ import Routers from "./router.js";
 
 class ProductsRouter extends Routers {
   init() {
-    this.get("/", ["PUBLIC"], getProducts);
+    this.get("/", ["USER"], getProducts);
 
-    this.get("/:pid((?!(mockingproducts)w+))", ["PUBLIC"], getProductById);
+    this.get("/:pid((?!(mockingproducts)w+))", ["USER"], getProductById);
 
-    this.get("/mockingproducts", ["PUBLIC"], mockingProducts);
+    this.get("/mockingproducts", ["USER"], mockingProducts);
 
     this.post("/", ["ADMIN"], addProduct);
 

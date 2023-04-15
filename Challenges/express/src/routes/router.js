@@ -1,6 +1,6 @@
 import { Router } from "express";
-import jwt from "jsonwebtoken";
 import { passportCall } from "../utils.js";
+import CustomError from "../services/errors/CustomError.js";
 
 class Routers {
   constructor() {
@@ -69,11 +69,9 @@ class Routers {
       res.send({ status: 200, payload });
     };
 
-    res.sendError = (error) => {
-      res.send({ status: 500, error });
-    };
-    res.sendUserError = (error) => {
-      res.send({ status: 400, error });
+    res.sendError = (code, error) => {
+      const newError = new CustomError(code, error);
+      res.send(newError.createError());
     };
     next();
   };
