@@ -1,11 +1,11 @@
 import { productService } from "../dao/repository/index.js";
-import { mockingProduct, handleRes } from "../utils.js";
+import { mockingProduct, handleRes } from "../utils/utils.js";
 
 export const getProducts = async (req, res, next) => {
   try {
     return await getProductsAsync(req, res);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
@@ -14,9 +14,9 @@ export const getProductById = async (req, res, next) => {
     const { code, payload } = await productService.getProductById(
       req.params.pid
     );
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
@@ -32,9 +32,9 @@ export const mockingProducts = (req, res) => {
 export const addProduct = async (req, res, next) => {
   try {
     const { code, payload } = await productService.addProduct(req.body);
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
@@ -44,9 +44,9 @@ export const updateProduct = async (req, res, next) => {
       req.params.pid,
       req.body
     );
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
@@ -55,9 +55,9 @@ export const deleteProduct = async (req, res, next) => {
     const { code, payload } = await productService.deleteProduct(
       req.params.pid
     );
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
@@ -72,8 +72,8 @@ const getProductsAsync = async (req, res) => {
       sort,
       query
     );
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };

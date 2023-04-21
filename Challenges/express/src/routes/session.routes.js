@@ -1,5 +1,5 @@
 import Routers from "./router.js";
-import { passportCall, authorization } from "../utils.js";
+import { passportCall, authorization } from "../utils/utils.js";
 
 class SessionRouter extends Routers {
   init() {

@@ -1,0 +1,11 @@
+error: GET in / - 17:53:42
+error: GET in / - 17:55:34
+error: GET in / - 17:57:12
+error: GET in / - 17:58:10
+error: GET in /api/products - 18:09:16
+error: GET in /loggerTest - 18:29:41
+fatal: GET in /loggerTest - 18:29:41
+error: GET in /loggerTest - 18:38:55
+fatal: GET in /loggerTest - 18:38:55
+error: GET in /loggerTest - 18:39:04
+fatal: GET in /loggerTest - 18:39:04

@@ -1,17 +1,19 @@
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { faker } from "@faker-js/faker";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.resolve(path.dirname(__filename), "../");
+
+export default __dirname;
 
 export const createHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
 export const isValidPassword = (user, password) =>
   bcrypt.compareSync(password, user.password);
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
@@ -43,10 +45,16 @@ export const mockingProduct = () => {
   };
 };
 
-export const handleRes = (res, code, payload) => {
-  parseInt(code) >= 400
-    ? res.sendError(code, payload)
-    : res.sendSuccess(payload);
-};
+export const handleRes = (req, res, code, payload) => {
+  const log = `${req.method} in ${
+    req._parsedOriginalUrl.pathname
+  } - ${new Date().toLocaleTimeString()}`;
 
-export default __dirname;
+  if (parseInt(code) >= 400) {
+    req.logger.error(log);
+    res.sendError(code, payload);
+  } else {
+    req.logger.info(log);
+    res.sendSuccess(payload);
+  }
+};

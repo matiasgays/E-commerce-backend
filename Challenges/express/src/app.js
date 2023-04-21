@@ -11,10 +11,11 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 import messagesModel from "./dao/mongoDB/models/messages.model.js";
-import __dirname from "./utils.js";
+import __dirname from "./utils/utils.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import { addLogger } from "./utils/logger.js";
 
 dotenv.config();
 
@@ -54,7 +55,7 @@ app.use(
 
 initializePassport();
 app.use(passport.initialize());
-
+app.use(addLogger);
 app.use("/api/products", productsRouter.getRouter());
 app.use("/api/cart", cartRouter.getRouter());
 app.use("/", currentRouter.getRouter());

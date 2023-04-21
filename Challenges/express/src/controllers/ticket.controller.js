@@ -5,15 +5,15 @@ import {
 } from "../dao/repository/index.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { handleRes } from "../utils.js";
+import { handleRes } from "../utils/utils.js";
 
 export const getTicket = async (req, res, next) => {
   try {
     const { codeNumber } = req.body;
     const { code, payload } = await ticketService.getTicketByCode(codeNumber);
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
@@ -44,9 +44,9 @@ export const createTicket = async (req, res) => {
       purchaser: email,
     });
     const { code } = sendEmail(payload);
-    handleRes(res, code, payload);
+    handleRes(req, res, code, payload);
   } catch (error) {
-    res.sendError(500, error);
+    handleRes(req, res, 500, error);
   }
 };
 
