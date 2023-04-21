@@ -1,0 +1,30 @@
+config:
+  plugin:
+    metrics-by-endpoint: {}
+  target: "http://127.0.0.1:8080"
+  phases:
+    - duration: 20
+      arrivalRate: 10
+scenarios:
+  - name: "Sessions Flow(generate random user + create user)"
+    flow:
+      - log: "Generando un usuario nuevo aleatorio"
+      - get:
+          url: "/api/user/faker"
+          capture:
+            - json: "$.firstname"
+              as: "firstname"
+            - json: "$.lastname"
+              as: "lastname"
+            - json: "$.email"
+              as: "email"
+            - json: "$.password"
+              as: "password"
+      - log: "Creando el usuario: {{ email }}"
+      - post:
+          url: "/api/user/signup"
+          json: #este json represernta el body
+            firstname: "{{ firstname }}"
+            lastname: "{{ lastname }}"
+            email: "{{ email }}"
+            password: "{{ password }}"
