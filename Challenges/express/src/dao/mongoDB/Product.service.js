@@ -1,4 +1,5 @@
 import productModel from "./models/product.model.js";
+import { isPremiumUser } from "../../utils/utils.js";
 
 class Product {
   getProducts = async (limit, page, sort, qr) => {
@@ -38,7 +39,7 @@ class Product {
     }
   };
 
-  addProduct = async (product) => {
+  addProduct = async (product, user) => {
     const {
       title,
       description,
@@ -72,8 +73,9 @@ class Product {
         };
 
       try {
+        if (isPremiumUser(user)) product.owner = user.email;
         mongoRes = await productModel.create(product);
-        return { paylaod: mongoRes };
+        return { payload: mongoRes };
       } catch (error) {
         return { code: 500, payload: error };
       }
@@ -82,19 +84,27 @@ class Product {
     }
   };
 
-  updateProduct = async (pid, obj) => {
+  updateProduct = async (pid, obj, user) => {
     try {
-      const mongoRes = await productModel.findByIdAndUpdate(pid, obj);
-      return { paylaod: mongoRes };
+      if (isPremiumUser(user)) {
+        return premiumUpdate(pid, obj, user);
+      } else {
+        const mongoRes = await productModel.findByIdAndUpdate(pid, obj);
+        return { payload: mongoRes };
+      }
     } catch (error) {
       return { code: 500, payload: error };
     }
   };
 
-  deleteProduct = async (pid) => {
+  deleteProduct = async (pid, user) => {
     try {
-      const mongoRes = await productModel.findByIdAndRemove(pid);
-      return { paylaod: mongoRes };
+      if (isPremiumUser(user)) {
+        return premiumDelete(pid, user);
+      } else {
+        const mongoRes = await productModel.findByIdAndRemove(pid);
+        return { payload: mongoRes };
+      }
     } catch (error) {
       return { code: 500, payload: error };
     }
@@ -102,3 +112,27 @@ class Product {
 }
 
 export default Product;
+
+const premiumDelete = async (pid, user) => {
+  const product = await productModel.findById(pid);
+  if (product.owner === user.email) {
+    const mongoRes = await productModel.findOneAndDelete(pid);
+    return { payload: mongoRes };
+  }
+  return {
+    code: 401,
+    payload: "Can not delete product. You are not the owner",
+  };
+};
+
+const premiumUpdate = async (pid, obj, user) => {
+  const product = await productModel.findById(pid);
+  if (product.owner === user.email) {
+    const mongoRes = await productModel.findByIdAndUpdate(pid, obj);
+    return { payload: mongoRes };
+  }
+  return {
+    code: 401,
+    payload: "Can not update product. You are not the owner",
+  };
+};

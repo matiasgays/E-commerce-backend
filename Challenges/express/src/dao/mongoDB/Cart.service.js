@@ -1,4 +1,6 @@
 import cartModel from "./models/cart.model.js";
+import productModel from "./models/product.model.js";
+import { isPremiumUser } from "../../utils/utils.js";
 
 class Cart {
   constructor() {}
@@ -61,11 +63,20 @@ class Cart {
     }
   };
 
-  addProductInCart = async (cart) => {
+  addProductInCart = async (cart, user) => {
     const { id, quantity } = cart.products[0];
     if (!id || !quantity)
       return { code: 400, payload: `Could not found ${pid.id}` };
     try {
+      if (isPremiumUser(user)) {
+        const product = await productModel.findById(id);
+        if (product.owner === user.email)
+          return {
+            code: 401,
+            payload:
+              "Can not add product in cart. You are the owner of the product",
+          };
+      }
       const mongoRes = await cartModel.create({
         products: { quantity, product: id },
       });
@@ -75,7 +86,7 @@ class Cart {
     }
   };
 
-  addProductInCartById = async (cid, pid) => {
+  addProductInCartById = async (cid, pid, user) => {
     try {
       const cartFound = await cartModel.findById(cid);
       const pidInCart = cartFound.products.find((p) => {
@@ -84,6 +95,16 @@ class Cart {
       });
       if (pidInCart) {
         try {
+          if (isPremiumUser(user)) {
+            const product = await productModel.findById(pid);
+            if (product.owner === user.email) {
+              return {
+                code: 401,
+                payload:
+                  "Can not add product in cart. You are the owner of the product",
+              };
+            }
+          }
           const update = { $inc: { "products.$[elem].quantity": 1 } };
           const mongoRes = await cartModel.updateOne({ _id: cid }, update, {
             arrayFilters: [{ "elem.product": pid }],

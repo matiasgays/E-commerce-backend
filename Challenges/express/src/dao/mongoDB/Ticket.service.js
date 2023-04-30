@@ -21,6 +21,7 @@ class Ticket {
     }
   };
 
+  /* -----------  DEV FUNCTION ----------- */
   deleteAll = async () => {
     try {
       const mongoRes = await ticketModel.deleteMany({

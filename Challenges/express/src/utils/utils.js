@@ -3,6 +3,7 @@ import passport from "passport";
 import { faker } from "@faker-js/faker";
 import { fileURLToPath } from "url";
 import path from "path";
+import crypto from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(path.dirname(__filename), "../");
@@ -15,6 +16,9 @@ export const createHash = (password) =>
 export const isValidPassword = (user, password) =>
   bcrypt.compareSync(password, user.password);
 
+export const createToken = () =>
+  crypto.randomBytes(16).toString("hex").substring(0, 16);
+
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, (err, user, info) => {
@@ -22,13 +26,6 @@ export const passportCall = (strategy) => {
       req.user = user;
       next();
     })(req, res, next);
-  };
-};
-
-export const authorization = () => {
-  return async (req, res, next) => {
-    if (!req.user) return res.status(401).redirect("/login");
-    next();
   };
 };
 
@@ -57,4 +54,8 @@ export const handleRes = (req, res, code, payload) => {
     req.logger.info(log);
     res.sendSuccess(payload);
   }
+};
+
+export const isPremiumUser = (user) => {
+  return user.role === "USER_PREMIUM";
 };

@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import userModel from "../dao/mongoDB/models/user.model.js";
-import { createHash, isValidPassword } from "../utils/utils.js";
+import { createHash, isValidPassword, createToken } from "../utils/utils.js";
 import dotenv from "dotenv";
 import jwt, { ExtractJwt } from "passport-jwt";
 import githubStrategy from "passport-github2";
@@ -33,14 +33,15 @@ const initializePassport = () => {
             console.log("User already exists");
             return done(null, false);
           }
+          let isAdmin = false;
+          if (firstName === "Admin" && lastName === "Coder") isAdmin = true;
           const newUser = {
             firstName,
             lastName,
             age,
             email,
             password: createHash(password),
-            role:
-              firstName === "Admin" && lastName === "Coder" ? "admin" : "user",
+            role: isAdmin ? "ADMIN" : "USER",
           };
           const result = await userModel.create(newUser);
           return done(null, result);
@@ -96,6 +97,24 @@ const initializePassport = () => {
           return done(null, true);
         } catch (error) {
           throw new Error({ status: 500, message: error });
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "resetPassword",
+    new LocalStrategy(
+      { usernameField: "email" },
+      async (email, password, done) => {
+        try {
+          const user = await userModel.findOne({ email });
+          if (!user) {
+            return done(null, false);
+          }
+          return done(null, user);
+        } catch (error) {
+          throw new Error(error);
         }
       }
     )

@@ -15,7 +15,7 @@ submit.addEventListener("click", async () => {
       headers: { "Content-type": "application/json;charset=UTF-8" },
       body: JSON.stringify({ firstName, lastName, age, email, password }),
     });
-    if (serverRes.status === 201) {
+    if (serverRes.status === 200) {
       window.location.href = "/login";
     } else {
       alert("Could not create user");

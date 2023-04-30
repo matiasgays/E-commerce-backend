@@ -66,23 +66,24 @@ class Routers {
 
   generateCustomResponses = (req, res, next) => {
     res.sendSuccess = (payload) => {
-      res.send({ status: 200, payload });
+      res.status(200).send({ status: 200, payload });
     };
 
     res.sendError = (code, error) => {
       const newError = new CustomError(code, error);
-      res.send(newError.createError());
+      res.status(code).send(newError.createError());
     };
     next();
   };
 
   //
   handlePolicies = (policies) => async (req, res, next) => {
-    if (!req.user.role) {
-      if (policies.includes("PUBLIC")) return next();
-      return res.status(401).redirect("/login");
-    }
-    if (!policies.includes(req.user.role.toUpperCase()))
+    if (policies.includes("PUBLIC")) return next();
+    if (!req.user)
+      return res
+        .status(401)
+        .send({ error: "Unauthorized. You must be an user" });
+    if (!policies.includes(req.user.role))
       return res.status(403).send({ error: "User with bad policies" });
     next();
   };

@@ -13,33 +13,49 @@ import Routers from "./router.js";
 
 class CartRouter extends Routers {
   init() {
-    this.get("/", ["USER"], getCart);
+    this.get("/", ["USER", "USER_PREMIUM"], getCart);
 
-    this.get("/:cid/json", ["USER"], getCartById);
+    this.get("/:cid/json", ["USER", "USER_PREMIUM"], getCartById);
 
-    this.get("/:cid", ["USER"], (req, res, next) => {
+    this.get("/:cid", ["USER", "USER_PREMIUM"], (req, res, next) => {
       res.render("cart", { style: "cart.css" });
     });
 
-    this.get("/:cid/purchase/:ticket", ["USER"], (req, res, next) => {
-      res.render("ticket", {});
-    });
+    this.get(
+      "/:cid/purchase/:ticket",
+      ["USER", "USER_PREMIUM"],
+      (req, res, next) => {
+        res.render("ticket", {});
+      }
+    );
 
-    this.post("/:cid/purchase/:ticket", ["USER"], getTicket);
+    this.post("/:cid/purchase/:ticket", ["USER", "USER_PREMIUM"], getTicket);
 
-    this.post("/:cid/purchase", ["USER"], createTicket);
+    this.post("/:cid/purchase", ["USER", "USER_PREMIUM"], createTicket);
 
-    this.post("/", ["USER"], addProductInCart);
+    this.post("/", ["USER", "USER_PREMIUM"], addProductInCart);
 
-    this.post("/:cid/product/:pid", ["USER"], addProductInCartById);
+    this.post(
+      "/:cid/product/:pid",
+      ["USER", "USER_PREMIUM"],
+      addProductInCartById
+    );
 
-    this.put("/:cid", ["USER"], updateCartById);
+    this.put("/:cid", ["USER", "USER_PREMIUM"], updateCartById);
 
-    this.put("/:cid/product/:pid", ["USER"], updateProductInCartById);
+    this.put(
+      "/:cid/product/:pid",
+      ["USER", "USER_PREMIUM"],
+      updateProductInCartById
+    );
 
-    this.delete("/:cid", ["USER"], deleteCartById);
+    this.delete("/:cid", ["USER", "USER_PREMIUM"], deleteCartById);
 
-    this.delete("/:cid/product/:pid", ["USER"], deleteProductInCartById);
+    this.delete(
+      "/:cid/product/:pid",
+      ["USER", "USER_PREMIUM"],
+      deleteProductInCartById
+    );
   }
 }
 

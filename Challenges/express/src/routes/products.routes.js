@@ -10,17 +10,25 @@ import Routers from "./router.js";
 
 class ProductsRouter extends Routers {
   init() {
-    this.get("/", ["USER"], getProducts);
+    this.get("/", ["USER", "USER_PREMIUM", "ADMIN"], getProducts);
 
-    this.get("/:pid((?!(mockingproducts)w+))", ["USER"], getProductById);
+    this.get(
+      "/:pid((?!(mockingproducts)w+))",
+      ["USER", "USER_PREMIUM", "ADMIN"],
+      getProductById
+    );
 
-    this.get("/mockingproducts", ["USER"], mockingProducts);
+    this.get(
+      "/mockingproducts",
+      ["USER", "USER_PREMIUM", "ADMIN"],
+      mockingProducts
+    );
 
-    this.post("/", ["ADMIN"], addProduct);
+    this.post("/", ["USER_PREMIUM", "ADMIN"], addProduct);
 
-    this.put("/:pid", ["ADMIN"], updateProduct);
+    this.put("/:pid", ["USER_PREMIUM", "ADMIN"], updateProduct);
 
-    this.delete("/:pid", ["ADMIN"], deleteProduct);
+    this.delete("/:pid", ["USER_PREMIUM", "ADMIN"], deleteProduct);
   }
 }
 

@@ -31,7 +31,10 @@ export const mockingProducts = (req, res) => {
 
 export const addProduct = async (req, res, next) => {
   try {
-    const { code, payload } = await productService.addProduct(req.body);
+    const { code, payload } = await productService.addProduct(
+      req.body,
+      req.user
+    );
     handleRes(req, res, code, payload);
   } catch (error) {
     handleRes(req, res, 500, error);
@@ -42,7 +45,8 @@ export const updateProduct = async (req, res, next) => {
   try {
     const { code, payload } = await productService.updateProduct(
       req.params.pid,
-      req.body
+      req.body,
+      req.user
     );
     handleRes(req, res, code, payload);
   } catch (error) {
@@ -53,7 +57,8 @@ export const updateProduct = async (req, res, next) => {
 export const deleteProduct = async (req, res, next) => {
   try {
     const { code, payload } = await productService.deleteProduct(
-      req.params.pid
+      req.params.pid,
+      req.user
     );
     handleRes(req, res, code, payload);
   } catch (error) {

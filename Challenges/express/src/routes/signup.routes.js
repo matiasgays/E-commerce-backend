@@ -7,16 +7,9 @@ class SignupRouter extends Routers {
       res.render("signup", { style: "signup.css" });
     });
 
-    this.post(
-      "/",
-      ["PUBLIC"],
-      passport.authenticate("signup", {
-        failureRedirect: "/signup",
-      }),
-      (req, res) => {
-        res.sendSuccess();
-      }
-    );
+    this.post("/", ["PUBLIC"], passport.authenticate("signup"), (req, res) => {
+      res.sendSuccess();
+    });
   }
 }
 

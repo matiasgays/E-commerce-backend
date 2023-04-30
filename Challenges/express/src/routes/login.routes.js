@@ -8,12 +8,7 @@ class LoginRouter extends Routers {
       return res.render("login", { style: "login.css" });
     });
 
-    this.post(
-      "/",
-      ["PUBLIC"],
-      passport.authenticate("login", { failureRedirect: "/login" }),
-      signCookie
-    );
+    this.post("/", ["PUBLIC"], passport.authenticate("login"), signCookie);
 
     this.get(
       "/github",
@@ -36,6 +31,9 @@ class LoginRouter extends Routers {
 export default LoginRouter;
 
 const signCookie = (req, res) => {
+  if (!req.user) {
+    return res.status(401).redirect("/login");
+  }
   const { firstName, lastName, email, password, role } = req.user;
   let token = jwt.sign(
     { firstName, lastName, email, password, role },

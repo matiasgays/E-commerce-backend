@@ -22,7 +22,10 @@ export const getCartById = async (req, res, next) => {
 
 export const addProductInCart = async (req, res, next) => {
   try {
-    const { code, payload } = await cartService.addProductInCart(req.body);
+    const { code, payload } = await cartService.addProductInCart(
+      req.body,
+      req.user
+    );
     handleRes(req, res, code, payload);
   } catch (error) {
     handleRes(req, res, 500, error);
@@ -33,7 +36,8 @@ export const addProductInCartById = async (req, res, next) => {
   try {
     const { code, payload } = await cartService.addProductInCartById(
       req.params.cid,
-      req.params.pid
+      req.params.pid,
+      req.user
     );
     handleRes(req, res, code, payload);
   } catch (error) {

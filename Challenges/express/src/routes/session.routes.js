@@ -1,9 +1,8 @@
 import Routers from "./router.js";
-import { passportCall, authorization } from "../utils/utils.js";
 
 class SessionRouter extends Routers {
   init() {
-    this.get("/", ["USER"], authorization("user"), (req, res) => {
+    this.get("/", ["USER", "USER_PREMIUM", "ADMIN"], (req, res) => {
       const { firstName, lastName, age, user, admin } = req.user;
       const profile = {
         user,
@@ -15,7 +14,7 @@ class SessionRouter extends Routers {
       res.render("products", { style: "index.css", profile });
     });
 
-    this.get("/current", ["USER"], authorization("user"), (req, res) => {
+    this.get("/current", ["USER", "USER_PREMIUM", "ADMIN"], (req, res) => {
       res.send(req.user);
     });
   }
