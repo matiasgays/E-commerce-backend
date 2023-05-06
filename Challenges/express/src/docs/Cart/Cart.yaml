@@ -1,0 +1,174 @@
+paths:
+  /api/cart/:
+    get:
+      summary: Get all cart
+      tags:
+        - Cart
+      responses:
+        "200":
+          description: Cart found
+        "401":
+          description: Not authorized. You must be an user
+        "500":
+          description: Server Error
+    post:
+      summary: Create cart
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/product"
+      responses:
+        "200":
+          description: Cart created
+        "401":
+          description: Not authorized. You must be an user
+        "500":
+          description: Server Error
+  /api/cart/{cid}:
+    get:
+      summary: Render cart by ID
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Cart found
+        "401":
+          description: Not authorized. You must be an user
+        "500":
+          description: Server Error
+    put:
+      summary: Update product by ID
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/product"
+      responses:
+        "200":
+          description: Cart updated
+        "401":
+          description: Not authorized. You must be an user
+        "500":
+          description: Server Error
+    delete:
+      summary: Delete cart by ID
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Cart deleted
+        "401":
+          description: Not authorized. You must be an user
+        "500":
+          description: Server Error
+  /api/cart/{cid}/json:
+    get:
+      summary: Get cart by ID
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Cart found
+        "401":
+          description: Not authorized. You must be an user
+        "500":
+          description: Server Error
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+        products:
+          type: Array
+          items:
+            products:
+              type: object
+              items:
+                _id:
+                  type: ObjectId
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                thumbnail:
+                  type: string
+                code:
+                  type: number
+                stock:
+                  type: number
+                status:
+                  type: boolean
+                category:
+                  type: string
+                owner:
+                  type: string
+            quantity:
+              type: number
+            _id:
+              type: ObjectId
+      description: ref products
+      example:
+        _id: 63de7e8c5e23r74d5798375
+        products:
+          products:
+            _id: 63de7e8c5eb0e574d5798493
+            title: trainers
+            description: black&white
+            price: 300
+            thumbnail: /images/trainer.jpg
+            code: 1002242
+            stock: 24
+            status: true
+            category: shoes
+            __v: 0
+            owner: admin
+          quantity: 6
+          _id: 63de7e8w345gh574d5712522
+
+  requestBodies:
+    product:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            _id:
+              type: ObjectId
+            quantity:
+              type: number

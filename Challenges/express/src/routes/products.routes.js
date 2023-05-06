@@ -13,7 +13,7 @@ class ProductsRouter extends Routers {
     this.get("/", ["USER", "USER_PREMIUM", "ADMIN"], getProducts);
 
     this.get(
-      "/:pid((?!(mockingproducts)w+))",
+      "/:pid([a-zA-Z0-9]{24})",
       ["USER", "USER_PREMIUM", "ADMIN"],
       getProductById
     );

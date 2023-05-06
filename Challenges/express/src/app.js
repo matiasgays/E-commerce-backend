@@ -1,4 +1,17 @@
 import express from "express";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import handlebars from "express-handlebars";
+import { Server } from "socket.io";
+import dotenv from "dotenv";
+import cors from "cors";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
+
+import __dirname from "./utils/utils.js";
+import { addLogger } from "./utils/logger.js";
+
 import ProductsRouter from "./routes/products.routes.js";
 import CartRouter from "./routes/cart.routes.js";
 import CurrentRouter from "./routes/current.routes.js";
@@ -9,16 +22,7 @@ import LoginRouter from "./routes/login.routes.js";
 import SignupRouter from "./routes/signup.routes.js";
 import ResetPasswordRouter from "./routes/resetPassword.routes.js";
 import UserRouter from "./routes/users.routes.js";
-import handlebars from "express-handlebars";
-import { Server } from "socket.io";
-import dotenv from "dotenv";
 import messagesModel from "./dao/mongoDB/models/messages.model.js";
-import __dirname from "./utils/utils.js";
-import session from "express-session";
-import cookieParser from "cookie-parser";
-import passport from "passport";
-import { addLogger } from "./utils/logger.js";
-import cors from "cors";
 
 dotenv.config();
 
@@ -40,6 +44,18 @@ const httpServer = app.listen(PORT, () => {
 });
 
 const io = new Server(httpServer);
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentation of Products and Cart modules",
+      description:
+        "The Products module stores all the items offered in the ecommerce while the Cart module contains the user's shopping cart.",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+const specs = swaggerJsdoc(swaggerOptions);
 
 app.engine("handlebars", handlebars.engine());
 app.use(express.json());
@@ -58,6 +74,7 @@ app.use(
   })
 );
 app.use(cors());
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 initializePassport();
 app.use(passport.initialize());
