@@ -1,11 +1,20 @@
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import Routers from "./router.js";
+import userModel from "../dao/mongoDB/models/user.model.js";
 
 class LoginRouter extends Routers {
   init() {
     this.get("/", ["PUBLIC"], (req, res) => {
       return res.render("login", { style: "login.css" });
+    });
+
+    this.get("/logout", ["USER", "USER_PREMIUM"], async (req, res) => {
+      await userModel.findOneAndUpdate(
+        { email: req.user.email },
+        { $set: { lastConnection: new Date() } }
+      );
+      return res.status(200).send();
     });
 
     this.post("/", ["PUBLIC"], passport.authenticate("login"), signCookie);

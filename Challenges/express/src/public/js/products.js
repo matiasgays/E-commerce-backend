@@ -5,9 +5,9 @@ const prevPage = document.getElementById("prevPage");
 const nextPage = document.getElementById("nextPage");
 const addToCart = document.getElementById("addToCart");
 let user;
-const API = "http://127.0.0.1:8080/";
-const API_PRODUCTS = "http://127.0.0.1:8080/api/products";
-const API_CART = "http://127.0.0.1:8080/api/cart";
+const API = "http://localhost:8080/";
+const API_PRODUCTS = "http://localhost:8080/api/products";
+const API_CART = "http://localhost:8080/api/cart";
 const logout = document.getElementById("logout");
 
 getProductsList();
@@ -27,7 +27,11 @@ prevPage.addEventListener("click", () => {
   window.location.href = API + query;
 });
 
-logout.addEventListener("click", () => {
+logout.addEventListener("click", async () => {
+  await fetch("/login/logout", {
+    method: "GET",
+    headers: { "Content-type": "application/json;charset=UTF-8" },
+  });
   window.location.href = "/login";
 });
 

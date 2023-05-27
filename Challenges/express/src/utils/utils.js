@@ -4,6 +4,7 @@ import { faker } from "@faker-js/faker";
 import { fileURLToPath } from "url";
 import path from "path";
 import crypto from "crypto";
+import multer from "multer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(path.dirname(__filename), "../");
@@ -59,3 +60,30 @@ export const handleRes = (req, res, code, payload) => {
 export const isPremiumUser = (user) => {
   return user.role === "USER_PREMIUM";
 };
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    switch (file.fieldname) {
+      case "profile":
+        cb(null, __dirname + "/public/profiles");
+        break;
+      case "products":
+        cb(null, __dirname + "/public/products");
+        break;
+      case "ID":
+        cb(null, __dirname + "/public/documents");
+        break;
+      case "proofAddress":
+        cb(null, __dirname + "/public/documents");
+        break;
+      case "proofBankAccount":
+        cb(null, __dirname + "/public/documents");
+        break;
+    }
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+export const uploader = multer({ storage });

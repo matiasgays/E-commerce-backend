@@ -58,7 +58,10 @@ const initializePassport = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          const user = await userModel.findOne({ email: username });
+          const user = await userModel.findOneAndUpdate(
+            { email: username },
+            { $set: { lastConnection: new Date() } }
+          );
           if (!user || !isValidPassword(user, password)) {
             return done(null, false);
           }
