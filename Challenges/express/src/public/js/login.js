@@ -23,9 +23,9 @@ login.addEventListener("click", async (e) => {
 });
 
 github.addEventListener("click", () => {
-  window.location.href = "http://127.0.0.1:8080/login/github";
+  window.location.href = "http://localhost:8080/login/github";
 });
 
 signup.addEventListener("click", () => {
-  window.location.href = "http://127.0.0.1:8080/signup";
+  window.location.href = "http://localhost:8080/signup";
 });

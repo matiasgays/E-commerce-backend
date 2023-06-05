@@ -46,6 +46,10 @@ const userSchema = mongoose.Schema({
     default: [],
   },
   lastConnection: Date,
+  cartId: {
+    type: String,
+    required: true,
+  },
 });
 
 const userModel = mongoose.model("users", userSchema);

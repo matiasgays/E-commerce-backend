@@ -1,3 +1,5 @@
+import nodemailer from "nodemailer";
+
 import productModel from "./models/product.model.js";
 import { isPremiumUser } from "../../utils/utils.js";
 
@@ -114,15 +116,20 @@ class Product {
 export default Product;
 
 const premiumDelete = async (pid, user) => {
-  const product = await productModel.findById(pid);
-  if (product.owner === user.email) {
-    const mongoRes = await productModel.findOneAndDelete(pid);
-    return { payload: mongoRes };
+  try {
+    const product = await productModel.findById(pid);
+    if (product.owner === user.email) {
+      const mongoRes = await productModel.findOneAndDelete(pid);
+      await sendEmail(user.email, product);
+      return { payload: mongoRes };
+    }
+    return {
+      code: 401,
+      payload: "Can not delete product. You are not the owner",
+    };
+  } catch (error) {
+    return { code: 500, payload: error };
   }
-  return {
-    code: 401,
-    payload: "Can not delete product. You are not the owner",
-  };
 };
 
 const premiumUpdate = async (pid, obj, user) => {
@@ -135,4 +142,30 @@ const premiumUpdate = async (pid, obj, user) => {
     code: 401,
     payload: "Can not update product. You are not the owner",
   };
+};
+
+const sendEmail = async (email, product) => {
+  try {
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      port: 587,
+      auth: {
+        user: "ing.matiasgays@gmail.com",
+        pass: "pwkmijenegtzmzrx",
+      },
+    });
+    await transport.sendMail({
+      from: "ing.matiasgays@gmail.com",
+      to: email,
+      subject: "Product deleted",
+      html: `
+    <div>
+        Your ${product} was deleted 
+    </div>`,
+      attachments: [],
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+  return;
 };

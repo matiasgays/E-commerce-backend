@@ -12,7 +12,7 @@ const fetchProductById = async (req, res) => {
   const url = getCurrentURL();
   const pid = getId(url);
   try {
-    const serverRes = await fetch(`http://127.0.0.1:8080/api/products/${pid}`);
+    const serverRes = await fetch(`http://localhost:8080/api/products/${pid}`);
     const serverResJSON = await serverRes.json();
     const { title, description, price, thumbnail, category, stock } =
       serverResJSON.payload;
@@ -29,7 +29,6 @@ const fetchProductById = async (req, res) => {
                               </div>
                               <div class="product-price">
                                 <span>$${price}</span>
-                                <a href="#" class="cart-btn">Add to cart</a>
                               </div>
                             </div>
                           </main>`;

@@ -1,6 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import userModel from "../dao/mongoDB/models/user.model.js";
+import cartModel from "../dao/mongoDB/models/cart.model.js";
 import { createHash, isValidPassword, createToken } from "../utils/utils.js";
 import dotenv from "dotenv";
 import jwt, { ExtractJwt } from "passport-jwt";
@@ -35,6 +36,10 @@ const initializePassport = () => {
           }
           let isAdmin = false;
           if (firstName === "Admin" && lastName === "Coder") isAdmin = true;
+          const cart = {
+            products: [],
+          };
+          const newCart = await cartModel.create(cart);
           const newUser = {
             firstName,
             lastName,
@@ -42,6 +47,7 @@ const initializePassport = () => {
             email,
             password: createHash(password),
             role: isAdmin ? "ADMIN" : "USER",
+            cartId: newCart._id,
           };
           const result = await userModel.create(newUser);
           return done(null, result);

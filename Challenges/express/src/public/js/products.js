@@ -4,13 +4,21 @@ const currentPage = document.getElementById("page");
 const prevPage = document.getElementById("prevPage");
 const nextPage = document.getElementById("nextPage");
 const addToCart = document.getElementById("addToCart");
-let user;
 const API = "http://localhost:8080/";
 const API_PRODUCTS = "http://localhost:8080/api/products";
-const API_CART = "http://localhost:8080/api/cart";
 const logout = document.getElementById("logout");
+const cart = document.getElementById("cart");
 
 getProductsList();
+
+cart.addEventListener("click", async () => {
+  try {
+    const cid = await getCartId();
+    window.location.href = `http://localhost:8080/api/cart/${cid}`;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 nextPage.addEventListener("click", () => {
   const params = getParams(getCurrentURL());
@@ -118,18 +126,20 @@ function handleAnchors() {
 }
 
 function handleAddToCartButtons() {
-  const cid = "63e7eb12143d3b6edf063115";
   document.querySelectorAll(".btn").forEach((button) => {
     button.addEventListener("click", async (e) => {
       e.preventDefault();
       const id = e.target.id;
-      const endpoint = `/${cid}/product/${id}`;
       try {
-        const serverRes = await fetch(API_CART + endpoint, {
-          method: "POST",
-          headers: { "Content-type": "application/json;charset=UTF-8" },
-          body: JSON.stringify({ role: "user" }),
-        });
+        const cid = await getCartId();
+        const serverRes = await fetch(
+          `http://localhost:8080/api/cart/${cid}/product/${id}`,
+          {
+            method: "POST",
+            headers: { "Content-type": "application/json;charset=UTF-8" },
+            body: JSON.stringify({ role: "USER" }),
+          }
+        );
         if (serverRes.status === 200) {
           alert(`Product added successfully to cart _id: ${cid}`);
         } else {
@@ -140,4 +150,14 @@ function handleAddToCartButtons() {
       }
     });
   });
+}
+
+async function getCartId() {
+  try {
+    const activeUser = await fetch("http://localhost:8080/api/users/user");
+    const activeUserJSON = await activeUser.json();
+    return activeUserJSON.payload.cartId;
+  } catch (error) {
+    throw new Error(error);
+  }
 }

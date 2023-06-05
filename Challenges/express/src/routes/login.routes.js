@@ -43,9 +43,9 @@ const signCookie = (req, res) => {
   if (!req.user) {
     return res.status(401).redirect("/login");
   }
-  const { firstName, lastName, email, password, role } = req.user;
+  const { firstName, lastName, email, password, role, cartId } = req.user;
   let token = jwt.sign(
-    { firstName, lastName, email, password, role },
+    { firstName, lastName, email, password, role, cartId },
     "mello",
     {
       expiresIn: "24h",

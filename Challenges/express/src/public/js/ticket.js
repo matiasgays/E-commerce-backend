@@ -5,7 +5,7 @@ const createTicket = async () => {
   const ticketCode = getTicketCode(url);
   try {
     const newTicket = await fetch(
-      `http://127.0.0.1:8080/api/cart/${cid}/purchase/${ticketCode}`,
+      `http://localhost:8080/api/cart/${cid}/purchase/${ticketCode}`,
       {
         method: "POST",
         headers: { "Content-type": "application/json;charset=UTF-8" },
